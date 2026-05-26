@@ -1,6 +1,7 @@
 package app.crawler;
 
 import java.io.File;
+import java.io.IOException;
 
 public class WebSocketEndPoint {
     private int port;
@@ -20,7 +21,7 @@ public class WebSocketEndPoint {
     }
 
     private void defaultPath(){
-        String macPath = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome";
+        String macPath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
         String[] winPaths = {"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
                 "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
                 System.getProperty("user.home") + "\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"};
@@ -42,9 +43,19 @@ public class WebSocketEndPoint {
         if(haveBrowserPath){
             ProcessBuilder pb;
             if(os.contains("mac")){
-                pb = new ProcessBuilder(String.format("%s --remote-debugging-port=%d --user-data-dir=\"/tmp/chrome_debug\"", this.browserPath, this.port));
+                pb = new ProcessBuilder(this.browserPath, "--remote-debugging-port="+this.port, "--user-data-dir=/tmp/chrome_debug");
+                try{
+                    pb.start();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }else if(os.contains("win")){
-                pb = new ProcessBuilder(String.format("%s --remote-debugging-port=%d --user-data-dir=\"C:\\ChromeProfile\"", this.browserPath, this.port));
+                pb = new ProcessBuilder(this.browserPath, "--remote-debugging-port="+this.port, "--user-data-dir=C:\\ChromeProfile");
+                try{
+                    pb.start();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
