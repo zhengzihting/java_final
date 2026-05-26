@@ -39,7 +39,9 @@ public class WebSocketEndPoint {
         }
     }
 
-    public void startWebSocket(){
+    public int getPort(){ return this.port; }
+
+    public void startWebSocket() throws RuntimeException{
         if(haveBrowserPath){
             ProcessBuilder pb;
             if(os.contains("mac")){
