@@ -50,7 +50,7 @@ public class DatabaseManager {
         StringBuilder sb = new StringBuilder();
         sb.append("===== 歷史監控紀錄 (最近20筆) =====\n");
         
-        String sql = "SELECT timestamp, message FROM history ORDER BY id DESC LIMIT 20";
+        String sql = "SELECT datetime(timestamp, 'localtime') AS timestamp, message FROM history ORDER BY id DESC LIMIT 20";
         
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
