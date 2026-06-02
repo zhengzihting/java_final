@@ -11,15 +11,17 @@ import kotlin.Unit;
 
 public class SystemNotificationService {
     private final Consumer<String> logger;
+    private final SoundPlayer soundPlayer = new SoundPlayer();
 
-    /** 預設 macOS 系統音效 */
-    public static final String DEFAULT_MAC_SOUND = "/System/Library/Sounds/Glass.aiff";
+    /**
+     * 當前使用的音效路徑。
+     * 空字串（{@link SoundPlayer#DEFAULT_SENTINEL}）代表使用 OS 預設音效。
+     */
+    private String soundPath = SoundPlayer.DEFAULT_SENTINEL;
 
-    /** 當前使用的音效路徑；空字串或 null 代表使用預設 */
-    private String soundPath = DEFAULT_MAC_SOUND;
-
-    /** 正在播放的通知音效行程；null 代表未在播放 */
-    private volatile Process notifyProcess = null;
+    /** 上次發送通知的時間（毫秒），用於 30 秒冷卻期節流 */
+    private volatile long lastNotifyTime = 0;
+    private static final long NOTIFY_COOLDOWN_MS = 30_000;
 
     /** 通知 icon，從 resources 載入，失敗時為 null */
     private static final Image NOTIFY_ICON = loadIcon();
@@ -28,29 +30,34 @@ public class SystemNotificationService {
         this.logger = logger;
     }
 
-    // -------------------------------------------------------------------------
-    // 音效設定
-    // -------------------------------------------------------------------------
+    // ── 音效設定 ──────────────────────────────────────────────────────────────
 
     /**
      * 設定通知音效路徑。
-     * @param path 音效檔路徑（aiff/wav/mp3 等），null 或空字串還原為預設音效
+     * @param path 音效檔完整路徑；null 或空字串代表使用 OS 預設音效
      */
     public void setSoundPath(String path) {
-        this.soundPath = (path == null || path.isBlank()) ? DEFAULT_MAC_SOUND : path;
+        this.soundPath = (path == null || path.isBlank())
+                ? SoundPlayer.DEFAULT_SENTINEL
+                : path;
     }
 
     public String getSoundPath() {
         return soundPath;
     }
 
-    // -------------------------------------------------------------------------
-    // 主要公開方法
-    // -------------------------------------------------------------------------
+    // ── 主要公開方法 ──────────────────────────────────────────────────────────
 
     public void notifyTicketAvailable(String ticketUrl, String details) {
-        // 1. 播放音效（非同步，不阻塞 UI）
-        playAlertSound();
+        long now = System.currentTimeMillis();
+        if (now - lastNotifyTime < NOTIFY_COOLDOWN_MS) {
+            log("通知冷卻中（30 秒內不重複發送），略過此次通知。");
+            return;
+        }
+        lastNotifyTime = now;
+
+        // 1. 播放音效（非同步，不阻塞 UI；空字串 → OS 預設音效）
+        soundPlayer.playAsync(soundPath, this::log);
 
         // 2. 顯示視覺通知（dorkbox Notify）
         try {
@@ -77,60 +84,22 @@ public class SystemNotificationService {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // 音效播放
-    // -------------------------------------------------------------------------
-
-    /**
-     * 在 macOS 上使用 afplay 播放音效；其他平台 beep。
-     */
-    private void playAlertSound() {
-        String os = System.getProperty("os.name", "").toLowerCase();
-        if (os.contains("mac")) {
-            playMacSound(soundPath);
-        } else {
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }
-
-    /**
-     * 使用 afplay 播放指定路徑的音效（背景執行）。
-     * 若前一個通知音效仍在播放，會先將其停止再開始新的，
-     * 確保同一時間只有一個通知音效在播放。
-     */
-    private void playMacSound(String path) {
-        if (path == null || path.isBlank()) path = DEFAULT_MAC_SOUND;
-        // 停止上一個尚未播完的通知音效
-        stopNotifySound();
-        try {
-            notifyProcess = new ProcessBuilder("afplay", path)
-                    .redirectErrorStream(true)
-                    .start();
-        } catch (Exception e) {
-            log("播放音效失敗：" + e.getMessage());
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }
+    // ── 音效控制（公開） ──────────────────────────────────────────────────────
 
     /**
      * 強制停止正在播放的通知音效。
      * 若無音效在播放則無動作。
      */
     public void stopNotifySound() {
-        Process p = notifyProcess;
-        if (p != null && p.isAlive()) {
-            p.destroy();
-        }
+        soundPlayer.stopAll();
     }
 
     /** 目前通知音效是否正在播放。 */
     public boolean isNotifySoundPlaying() {
-        return notifyProcess != null && notifyProcess.isAlive();
+        return soundPlayer.isPlaying();
     }
 
-    // -------------------------------------------------------------------------
-    // Icon 載入
-    // -------------------------------------------------------------------------
+    // ── Icon 載入 ──────────────────────────────────────────────────────────────
 
     private static Image loadIcon() {
         try (InputStream is = SystemNotificationService.class
@@ -142,9 +111,7 @@ public class SystemNotificationService {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // 開啟票務頁面
-    // -------------------------------------------------------------------------
+    // ── 開啟票務頁面 ──────────────────────────────────────────────────────────
 
     private void openTicketUrl(String ticketUrl) {
         try {
@@ -166,9 +133,7 @@ public class SystemNotificationService {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // 日誌
-    // -------------------------------------------------------------------------
+    // ── 日誌 ──────────────────────────────────────────────────────────────────
 
     private void log(String message) {
         if (logger != null) {

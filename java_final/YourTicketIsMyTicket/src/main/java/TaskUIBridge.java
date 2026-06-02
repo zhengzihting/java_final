@@ -44,8 +44,7 @@ public class TaskUIBridge {
                 if (task.soundPath != null && !task.soundPath.isBlank()) {
                     onSoundPathRestored.accept(task.soundPath);
                 }
-                logger.accept("已還原上次任務設定：" + taskStorageService.getStoragePath());
-            }, () -> logger.accept("尚無本地任務記憶，使用空白表單啟動。"));
+            }, () -> {});
         } catch (Exception e) {
             logger.accept("無法讀取本地任務記憶：" + e.getMessage());
         }
@@ -74,7 +73,7 @@ public class TaskUIBridge {
 
         try {
             taskStorageService.upsertTask(task);
-            logger.accept("已儲存任務記憶：" + taskStorageService.getStoragePath());
+
         } catch (Exception e) {
             logger.accept("儲存任務記憶失敗：" + e.getMessage());
         }

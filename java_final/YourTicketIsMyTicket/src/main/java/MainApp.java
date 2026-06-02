@@ -68,7 +68,7 @@ public class MainApp extends Application {
         addGridRow(inputGrid, "查詢票價：", priceInput, 3);
 
         // --- 3. 音效選擇列（放入 inputGrid 對齊其他欄位）---
-        soundPathLabel = new Label(SystemNotificationService.DEFAULT_MAC_SOUND);
+        soundPathLabel = new Label(SoundPlayer.defaultDisplayLabel());
         soundPathLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #888;");
         soundPathLabel.setMaxWidth(350);
         soundPathLabel.setWrapText(false);
@@ -163,7 +163,7 @@ public class MainApp extends Application {
 
         // 視窗設定
         Scene scene = new Scene(mainLayout, 620, 730);
-        primaryStage.setTitle("Ticket Monitor 監控系統 v2.0");
+        primaryStage.setTitle("Ticket Monitor 監控系統 v2.1");
         primaryStage.setScene(scene);
 
         primaryStage.setOnCloseRequest(e -> {
@@ -195,23 +195,27 @@ public class MainApp extends Application {
         appendLog("正在啟動監控... 目標條件：[" + keyword + "]");
         taskUIBridge.saveCurrentTask("RUNNING", soundManager.resolveSelectedSoundPath());
 
+        // 存入使用者這次的監控條件
+        String inputRecord = String.format("網址：%s　日期：%s　區域：%s　票價：%s",
+                url,
+                dateInput.getText().trim(),
+                areaInput.getText().trim(),
+                priceInput.getText().trim());
+        DatabaseManager.saveLog(inputRecord);
+
         monitor = new TicketMonitor(url, keyword, message -> {
             appendLog(message);
-            DatabaseManager.saveLog(message);
 
             if (message.contains("成功") || message.contains("釋票")) {
-                Platform.runLater(() -> {
-                    taskUIBridge.saveCurrentTask("TICKET_FOUND", soundManager.resolveSelectedSoundPath());
-                    setUIRunning(false);
-                });
+                Platform.runLater(() ->
+                    taskUIBridge.saveCurrentTask("TICKET_FOUND", soundManager.resolveSelectedSoundPath())
+                );
                 Thread notifyThread = new Thread(
                     () -> notificationService.notifyTicketAvailable(url, message),
                     "notify-thread"
                 );
                 notifyThread.setDaemon(true);
                 notifyThread.start();
-            } else if (message.contains("停止")) {
-                Platform.runLater(() -> setUIRunning(false));
             }
         });
 
@@ -261,7 +265,7 @@ public class MainApp extends Application {
 
     private void setUIRunning(boolean isRunning) {
         startBtn.setDisable(isRunning);
-        stopBtn.setDisable(!isRunning);
+        stopBtn.setDisable(!isRunning);  // 開始監控 → enable；停止監控 → disable
         urlInput.setDisable(isRunning);
         dateInput.setDisable(isRunning);
         areaInput.setDisable(isRunning);

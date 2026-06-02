@@ -1,7 +1,7 @@
-import java.util.function.Consumer;
-import javafx.application.Platform;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Consumer;
+import javafx.application.Platform;
 
 public class TicketMonitor {
     private String url;
