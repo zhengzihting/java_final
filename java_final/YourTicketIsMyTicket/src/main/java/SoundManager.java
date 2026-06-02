@@ -111,7 +111,7 @@ public class SoundManager {
             customSoundPath = file.getName();
             customSelected  = true;
             String resolvedPath = resolveSelectedSoundPath();
-            soundPathLabel.setText(resolvedPath);
+            soundPathLabel.setText(customSoundPath);
             notificationService.setSoundPath(resolvedPath);
             logger.accept("已自動選擇音效：" + resolvedPath);
             return true;
@@ -162,7 +162,7 @@ public class SoundManager {
             customSoundPath = file.getName();
             customSelected = true;
             String resolvedPath = resolveSelectedSoundPath();
-            soundPathLabel.setText(resolvedPath);
+            soundPathLabel.setText(customSoundPath);
             notificationService.setSoundPath(resolvedPath);
             logger.accept("已設定自訂音效：" + resolvedPath);
             return true;
@@ -226,7 +226,7 @@ public class SoundManager {
         customSoundPath = savedPath; // 相對檔名
         customSelected  = true;
         String resolvedPath = resolveSelectedSoundPath();
-        soundPathLabel.setText(resolvedPath);
+        soundPathLabel.setText(customSoundPath);
         notificationService.setSoundPath(resolvedPath);
         return true;
     }
