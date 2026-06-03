@@ -3,10 +3,32 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
     // 設定 SQLite 資料庫檔案名稱，會在專案根目錄自動生成這個檔案
     private static final String DB_URL = "jdbc:sqlite:ticket_monitor.db";
+
+    /**
+     * 結構化歷史紀錄物件
+     */
+    public static class HistoryEntry {
+        public final int id;
+        public final String timestamp;
+        public final String message;
+
+        public HistoryEntry(int id, String timestamp, String message) {
+            this.id = id;
+            this.timestamp = timestamp;
+            this.message = message;
+        }
+
+        @Override
+        public String toString() {
+            return "[" + timestamp + "]  " + message;
+        }
+    }
 
     /**
      * 1. 初始化資料庫：建立儲存紀錄的資料表
@@ -73,5 +95,33 @@ public class DatabaseManager {
         }
         
         return sb.toString();
+    }
+
+    /**
+     * 4. 只撈出監控條件格式的紀錄（包含「網址：」關鍵字），最近 50 筆
+     *    供歷史紀錄彈出視窗使用
+     */
+    public static List<HistoryEntry> getMonitoringHistory() {
+        List<HistoryEntry> entries = new ArrayList<>();
+        String sql = "SELECT id, datetime(timestamp, 'localtime') AS timestamp, message " +
+                     "FROM history WHERE message LIKE '%網址：%' " +
+                     "ORDER BY id DESC LIMIT 50";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                entries.add(new HistoryEntry(
+                    rs.getInt("id"),
+                    rs.getString("timestamp"),
+                    rs.getString("message")
+                ));
+            }
+        } catch (Exception e) {
+            System.err.println("讀取監控歷史失敗: " + e.getMessage());
+        }
+
+        return entries;
     }
 }

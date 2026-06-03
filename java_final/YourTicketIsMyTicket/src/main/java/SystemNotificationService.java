@@ -1,12 +1,10 @@
 import dorkbox.notify.Notify;
 import dorkbox.notify.Position;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.Desktop;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.function.Consumer;
+import javax.imageio.ImageIO;
 import kotlin.Unit;
 
 public class SystemNotificationService {
@@ -61,11 +59,12 @@ public class SystemNotificationService {
 
         // 2. 顯示視覺通知（dorkbox Notify）
         try {
+
             var builder = Notify.Companion.create()
                     .title("YourTicketIsMyTicket")
                     .text("偵測到符合條件的釋票，點擊通知開啟購票頁面。")
                     .hideAfter(12000)
-                    .position(Position.BOTTOM_RIGHT)
+                    .position(Position.TOP_RIGHT)
                     .onClickAction(notification -> {
                         openTicketUrl(ticketUrl);
                         notification.close();

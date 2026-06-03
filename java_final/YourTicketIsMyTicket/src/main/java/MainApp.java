@@ -1,5 +1,6 @@
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,13 +8,18 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class MainApp extends Application {
 
+    // 監控系統列與懸浮日誌管理器
+    private TrayUIManager trayUIManager;
+
+    private Stage primaryStage;
     private TicketMonitor monitor;
-    private TextArea logArea;
     private SystemNotificationService notificationService;
 
-    // 依據草稿設計的輸入欄位
+    // 輸入欄位
     private TextField urlInput;
     private TextField dateInput;
     private TextField areaInput;
@@ -27,12 +33,28 @@ public class MainApp extends Application {
     private SoundToggleSwitch soundToggle;
     private Label soundPathLabel;
 
+    // 歷史紀錄表格（顯示於主視窗底部）
+    private TableView<DatabaseManager.HistoryEntry> historyTableView;
+
     // 拆分出去的協作物件
     private SoundManager soundManager;
     private TaskUIBridge taskUIBridge;
 
     @Override
     public void start(Stage primaryStage) {
+        Platform.setImplicitExit(false);
+        this.primaryStage = primaryStage;
+
+        trayUIManager = new TrayUIManager(
+                primaryStage,
+                () -> {
+                    primaryStage.show();
+                    primaryStage.toFront();
+                },
+                this::handleStop,
+                this::exitApplication
+        );
+
         // 1. 初始化資料庫
         DatabaseManager.initializeDatabase();
 
@@ -94,28 +116,65 @@ public class MainApp extends Application {
         // --- 4. 按鈕區域 (HBox 橫向排列) ---
         startBtn = new Button("開始監控");
         stopBtn = new Button("停止");
-        Button historyBtn = new Button("歷史紀錄");
-        Button clearBtn = new Button("清除");
         Button testNotifyBtn = new Button("測試通知");
 
-        // 設定按鈕樣式與寬度
+        // 設定按鈕樣式
         String btnStyle = "-fx-font-size: 14px; -fx-padding: 8 15;";
         startBtn.setStyle(btnStyle + "-fx-background-color: #d4edda; -fx-border-color: #28a745;");
         stopBtn.setStyle(btnStyle + "-fx-background-color: #f8d7da; -fx-border-color: #dc3545;");
-        historyBtn.setStyle(btnStyle + "-fx-background-color: #f5f5f5; -fx-border-color: #9e9e9e;");
-        clearBtn.setStyle(btnStyle + "-fx-background-color: #f5f5f5; -fx-border-color: #9e9e9e;");
         testNotifyBtn.setStyle(btnStyle + "-fx-background-color: #fff3cd; -fx-border-color: #ffc107;");
         stopBtn.setDisable(true);
 
-        HBox buttonBar = new HBox(15, startBtn, stopBtn, historyBtn, clearBtn, testNotifyBtn);
+        HBox buttonBar = new HBox(15, startBtn, stopBtn, testNotifyBtn);
         buttonBar.setAlignment(Pos.CENTER);
 
-        // --- 5. 日誌顯示區 ---
-        logArea = new TextArea();
-        logArea.setEditable(false);
-        logArea.setPrefHeight(250);
-        logArea.setPromptText("等待啟動中...");
-        logArea.setStyle("-fx-font-family: 'Consolas', 'Microsoft JhengHei'; -fx-font-size: 13px;");
+        // --- 5. 歷史紀錄表格區（取代原 logArea）---
+        Label historyLabel = new Label("歷史監控紀錄");
+        historyLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;");
+
+        historyTableView = new TableView<>();
+        historyTableView.setPrefHeight(210);
+        // 不設定 CONSTRAINED_RESIZE_POLICY 以避免因 ScrollBar 預留空間導致標題列一開始偏移的問題
+        historyTableView.setPlaceholder(new Label("目前尚無監控條件紀錄"));
+
+        // 欄位定義
+        TableColumn<DatabaseManager.HistoryEntry, String> colDate = new TableColumn<>("日期");
+        colDate.setCellValueFactory(d -> new SimpleStringProperty(
+                parseField(d.getValue().message, "日期：")));
+        colDate.setPrefWidth(90);
+
+        TableColumn<DatabaseManager.HistoryEntry, String> colArea = new TableColumn<>("區域");
+        colArea.setCellValueFactory(d -> new SimpleStringProperty(
+                parseField(d.getValue().message, "區域：")));
+        colArea.setPrefWidth(70);
+
+        TableColumn<DatabaseManager.HistoryEntry, String> colPrice = new TableColumn<>("票價");
+        colPrice.setCellValueFactory(d -> new SimpleStringProperty(
+                parseField(d.getValue().message, "票價：")));
+        colPrice.setPrefWidth(60);
+
+        TableColumn<DatabaseManager.HistoryEntry, String> colUrl = new TableColumn<>("售票網址");
+        colUrl.setCellValueFactory(d -> new SimpleStringProperty(
+                parseField(d.getValue().message, "網址：")));
+        colUrl.setPrefWidth(190);
+
+        TableColumn<DatabaseManager.HistoryEntry, String> colTime = new TableColumn<>("時間");
+        colTime.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().timestamp));
+        colTime.setPrefWidth(140);
+
+        historyTableView.getColumns().addAll(colDate, colArea, colPrice, colTime, colUrl);
+        refreshHistoryList();
+
+        // 點選即套用（單擊）
+        historyTableView.setOnMouseClicked(e -> {
+            DatabaseManager.HistoryEntry selected =
+                    historyTableView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                parseAndRestoreRecord(selected.message);
+            }
+        });
+
+        VBox historySection = new VBox(8, historyLabel, historyTableView);
 
         // --- 初始化協作物件 ---
         notificationService = new SystemNotificationService(this::appendLog);
@@ -129,7 +188,7 @@ public class MainApp extends Application {
         });
 
         // --- 6. 佈局設定 ---
-        VBox mainLayout = new VBox(20, titleLabel, inputGrid, buttonBar, logArea);
+        VBox mainLayout = new VBox(20, titleLabel, inputGrid, buttonBar, historySection);
         mainLayout.setPadding(new Insets(30));
         mainLayout.setAlignment(Pos.TOP_CENTER);
         mainLayout.setStyle("-fx-background-color: #ffffff;");
@@ -157,26 +216,28 @@ public class MainApp extends Application {
 
         startBtn.setOnAction(e -> handleStart());
         stopBtn.setOnAction(e -> handleStop());
-        historyBtn.setOnAction(e -> appendLog("\n" + DatabaseManager.getRecentHistory()));
-        clearBtn.setOnAction(e -> logArea.clear());
         testNotifyBtn.setOnAction(e -> handleTestNotification());
 
         // 視窗設定
-        Scene scene = new Scene(mainLayout, 620, 730);
-        primaryStage.setTitle("Ticket Monitor 監控系統 v2.1");
+        Scene scene = new Scene(mainLayout, 620, 680);
+        primaryStage.setTitle("Ticket Monitor 監控系統 v3.0");
         primaryStage.setScene(scene);
 
         primaryStage.setOnCloseRequest(e -> {
-            soundManager.stopAllSounds(); // 關閉時先停止所有音效
-            if (monitor != null) monitor.stopMonitoring();
-            taskUIBridge.saveCurrentTask("STOPPED", soundManager.resolveSelectedSoundPath());
-            Platform.exit();
-            System.exit(0);
+            primaryStage.hide();
+            e.consume();
         });
 
         primaryStage.show();
     }
 
+    private void exitApplication() {
+        soundManager.stopAllSounds(); // 關閉時先停止所有音效
+        if (monitor != null) monitor.stopMonitoring();
+        taskUIBridge.saveCurrentTask("STOPPED", soundManager.resolveSelectedSoundPath());
+        Platform.exit();
+        System.exit(0);
+    }
     // -------------------------------------------------------------------------
     // 業務邏輯處理
     // -------------------------------------------------------------------------
@@ -187,11 +248,17 @@ public class MainApp extends Application {
                 dateInput.getText(), areaInput.getText(), priceInput.getText()).trim();
 
         if (url.isEmpty() || !url.startsWith("http")) {
-            appendLog("錯誤：請輸入有效的售票網址！");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "錯誤：請輸入有效的售票網址！", ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.showAndWait();
             return;
         }
 
         setUIRunning(true);
+
+        trayUIManager.clearLog();
+        trayUIManager.showFloatingLogIfNotShowing();
+
         appendLog("正在啟動監控... 目標條件：[" + keyword + "]");
         taskUIBridge.saveCurrentTask("RUNNING", soundManager.resolveSelectedSoundPath());
 
@@ -202,6 +269,9 @@ public class MainApp extends Application {
                 areaInput.getText().trim(),
                 priceInput.getText().trim());
         DatabaseManager.saveLog(inputRecord);
+
+        // 開始後刷新歷史清單（顯示本次新增的紀錄）
+        refreshHistoryList();
 
         monitor = new TicketMonitor(url, keyword, message -> {
             appendLog(message);
@@ -228,6 +298,8 @@ public class MainApp extends Application {
             appendLog("使用者手動停止監控。");
             taskUIBridge.saveCurrentTask("STOPPED", soundManager.resolveSelectedSoundPath());
             setUIRunning(false);
+            // 停止後刷新歷史清單
+            refreshHistoryList();
         }
     }
 
@@ -247,6 +319,64 @@ public class MainApp extends Application {
         );
         notifyThread.setDaemon(true);
         notifyThread.start();
+    }
+
+    // -------------------------------------------------------------------------
+
+    // -------------------------------------------------------------------------
+    // 歷史清單相關
+    // -------------------------------------------------------------------------
+
+    /** 從資料庫重新載入監控條件清單至主視窗的 TableView */
+    private void refreshHistoryList() {
+        List<DatabaseManager.HistoryEntry> entries = DatabaseManager.getMonitoringHistory();
+        Platform.runLater(() -> historyTableView.getItems().setAll(entries));
+    }
+
+    /**
+     * 從 message 字串中擷取指定前綴的欄位值。
+     * 格式：網址：xxx　日期：xxx　區域：xxx　票價：xxx
+     */
+    private String parseField(String message, String prefix) {
+        for (String part : message.split("　")) {
+            if (part.startsWith(prefix)) {
+                return part.substring(prefix.length()).trim();
+            }
+        }
+        return "";
+    }
+
+    /**
+     * 解析監控條件字串並直接填回 4 個輸入欄位。
+     * 格式：網址：xxx　日期：xxx　區域：xxx　票價：xxx
+     */
+    private void parseAndRestoreRecord(String message) {
+        try {
+            String[] parts = message.split("　");
+            String url   = "";
+            String date  = "";
+            String area  = "";
+            String price = "";
+
+            for (String part : parts) {
+                if (part.startsWith("網址："))       url   = part.substring(3).trim();
+                else if (part.startsWith("日期：")) date  = part.substring(3).trim();
+                else if (part.startsWith("區域：")) area  = part.substring(3).trim();
+                else if (part.startsWith("票價：")) price = part.substring(3).trim();
+            }
+
+            if (url.isEmpty()) return;
+
+            final String fUrl = url, fDate = date, fArea = area, fPrice = price;
+            Platform.runLater(() -> {
+                urlInput.setText(fUrl);
+                dateInput.setText(fDate);
+                areaInput.setText(fArea);
+                priceInput.setText(fPrice);
+            });
+        } catch (Exception ignored) {
+            // 格式不符則靜默忽略
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -273,10 +403,9 @@ public class MainApp extends Application {
     }
 
     private void appendLog(String message) {
-        Platform.runLater(() -> {
-            logArea.appendText(message + "\n");
-            logArea.setScrollTop(Double.MAX_VALUE);
-        });
+        if (trayUIManager != null) {
+            trayUIManager.appendLog(message);
+        }
     }
 
     public static void main(String[] args) {
