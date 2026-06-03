@@ -1,8 +1,8 @@
 package app.crawler;
 
-import com.microsoft.playwright.*;
-import com.microsoft.playwright.options.AriaRole;
-import java.util.regex.Pattern;
+import app.ticketData.TicketList;
+import com.microsoft.playwright.Locator;
+import java.util.List;
 
 public class KktixCrawler extends TicketWebCrawler {
 
@@ -10,16 +10,30 @@ public class KktixCrawler extends TicketWebCrawler {
         super(url);
     }
 
-    public boolean haveTicket() throws NullPointerException{
-        Locator sellTicketButton = getBuyTicketPage().getByRole(AriaRole.BUTTON,
-                new Page.GetByRoleOptions().setDisabled(false)).first();
-        Locator soldOutTicketText = getBuyTicketPage().getByText(Pattern.compile(" 已售完 ", Pattern.CASE_INSENSITIVE)).first();
-        if(sellTicketButton.isVisible()){
-            return true;
-        }else if(soldOutTicketText.isVisible()){
-            return false;
-        }else{
-            throw new NullPointerException("兩個按鈕都找不到！\n");
+    public boolean haveTicket(){
+        return false;
+    }
+
+    public TicketList crawlTickets() {
+        TicketList ticketList = new TicketList();
+        try{
+            List<Locator> ticketUnits = getBuyTicketPage().locator("div.ticket-unit").all();
+            ticketUnits.get(0).waitFor(new Locator.WaitForOptions().setTimeout(30000));
+            Thread.sleep(5000);
+
+            ticketList.setTickets(ticketUnits);
+        }catch(InterruptedException e){
+            System.err.println("crawlTickets InterruptedException:");
+            System.err.println(e);
+        }catch(NullPointerException e){
+            System.err.println("crawlTickets NullPointerException:");
+            System.err.println(e);
+            throw e;
+        }catch(RuntimeException e) {
+            System.err.println("crawlTickets RuntimeException:");
+            System.err.println(e);
         }
+
+        return ticketList;
     }
 }

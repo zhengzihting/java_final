@@ -3,7 +3,7 @@ package app.crawler;
 public class TicketWebCrawlerTest {
     public static void main(String[] args){
         System.out.println("Create ticketWebCrawler...");
-        TicketWebCrawler ticketWebCrawler = new TicketWebCrawler("https://ticket.ibon.com.tw/ActivityInfo/Details/39484");
+        KktixCrawler ticketWebCrawler = new KktixCrawler("https://ticket.ibon.com.tw/ActivityInfo/Details/39484");
         System.out.println("Test ticketWebCrawler's function...");
         ticketWebCrawler.startCrawler();
         System.out.println("Start crawler successfully!");

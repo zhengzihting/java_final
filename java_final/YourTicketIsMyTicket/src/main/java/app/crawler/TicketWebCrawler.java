@@ -2,10 +2,9 @@ package app.crawler;
 
 import com.microsoft.playwright.*;
 
-public class TicketWebCrawler {
+public abstract class TicketWebCrawler {
     private String url;
     private final String localHostUrl = "http://localhost:";
-    private enum TicketWebsite {IBON};
 
     private Playwright playwright;
     private WebSocketEndPoint ws;
