@@ -14,8 +14,19 @@ public class WebSocketEndPoint {
         defaultPath();
     }
 
+    public WebSocketEndPoint(int port){
+        this.port = port;
+        defaultPath();
+    }
+
     public WebSocketEndPoint(String browserPath){
         this.port = 9222;
+        this.browserPath = browserPath;
+        haveBrowserPath = new File(this.browserPath).exists();
+    }
+
+    public WebSocketEndPoint(int port, String browserPath){
+        this.port = port;
         this.browserPath = browserPath;
         haveBrowserPath = new File(this.browserPath).exists();
     }
@@ -40,6 +51,8 @@ public class WebSocketEndPoint {
     }
 
     public int getPort(){ return this.port; }
+
+    public boolean browserPathExist(){ return this.haveBrowserPath; }
 
     public void startWebSocket() throws RuntimeException{
         if(haveBrowserPath){

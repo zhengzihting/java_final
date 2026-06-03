@@ -37,6 +37,24 @@ public class TicketWebCrawler {
         }
     }
 
+    public void startCrawler(int port){
+        try{
+            playwright = Playwright.create();
+            ws = new WebSocketEndPoint(port);
+            ws.startWebSocket();
+
+            // 建立CDP的browser創建
+            browser = playwright.chromium().connectOverCDP(String.format("%s%d", localHostUrl, ws.getPort()));
+            // 尋找建立CDP browser後預設開好的BrowserContext
+            defaultContext = browser.contexts().get(0);
+            // 找預設開好的Page
+            buyTicketPage = defaultContext.pages().get(0);
+            buyTicketPage.navigate(url);
+        }catch(RuntimeException e){
+            System.err.println("RuntimeException: "+e);
+        }
+    }
+
     public void closeCrawler(){
         playwright.close();
     }
