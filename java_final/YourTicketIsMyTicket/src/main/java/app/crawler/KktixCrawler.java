@@ -22,6 +22,8 @@ public class KktixCrawler extends TicketWebCrawler {
             System.err.println("crawlTickets InterruptedException:");
             System.err.println(e);
         }catch(NullPointerException e){
+            System.err.println("tickets only get:");
+            System.err.println(ticketList);
             System.err.println("crawlTickets NullPointerException:");
             System.err.println(e);
             throw e;

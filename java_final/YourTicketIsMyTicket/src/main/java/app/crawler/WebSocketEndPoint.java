@@ -58,14 +58,22 @@ public class WebSocketEndPoint {
         if(haveBrowserPath){
             ProcessBuilder pb;
             if(os.contains("mac")){
-                pb = new ProcessBuilder(this.browserPath, "--remote-debugging-port="+this.port, "--user-data-dir=/tmp/chrome_debug");
+                pb = new ProcessBuilder(this.browserPath,
+                        "--remote-debugging-port="+this.port,
+                        "--user-data-dir=/tmp/chrome_debug",
+                        "--no-first-run",
+                        "--no-default-browser-check");
                 try{
                     pb.start();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }else if(os.contains("win")){
-                pb = new ProcessBuilder(this.browserPath, "--remote-debugging-port="+this.port, "--user-data-dir=C:\\ChromeProfile");
+                pb = new ProcessBuilder(this.browserPath,
+                        "--remote-debugging-port="+this.port,
+                        "--user-data-dir=C:\\ChromeProfile",
+                        "--no-first-run",
+                        "--no-default-browser-check");
                 try{
                     pb.start();
                 } catch (IOException e) {

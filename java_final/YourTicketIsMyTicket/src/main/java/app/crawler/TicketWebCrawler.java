@@ -54,6 +54,10 @@ public abstract class TicketWebCrawler {
         }
     }
 
+    public void refreshPage(){
+        buyTicketPage.reload();
+    }
+
     public void closeCrawler(){
         buyTicketPage.close();
         playwright.close();
