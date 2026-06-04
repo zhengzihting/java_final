@@ -102,7 +102,6 @@ public class TaskStorageService {
 
     public static class StoredTask {
         public String url;
-        public String date;
         public String area;
         public String price;
         public String keyword;
@@ -112,13 +111,12 @@ public class TaskStorageService {
         /** 自訂音效路徑；null 或空字串代表使用預設音效 */
         public String soundPath;
 
-        public static StoredTask fromInputs(String url, String date, String area, String price, String lastStatus, String soundPath) {
+        public static StoredTask fromInputs(String url,String area, String price, String lastStatus, String soundPath) {
             StoredTask task = new StoredTask();
             task.url = clean(url);
-            task.date = clean(date);
             task.area = clean(area);
             task.price = clean(price);
-            task.keyword = String.format("%s %s %s", task.date, task.area, task.price).trim();
+            task.keyword = String.format("%s %s", task.area, task.price).trim();
             task.lastStatus = clean(lastStatus);
             task.soundPath = clean(soundPath);
             return task;
