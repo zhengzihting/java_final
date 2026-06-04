@@ -2,7 +2,7 @@ package app.crawler;
 
 // only for demo, not used
 public class IbonCrawlerTest {
-    public static void main(String[] main) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         String url = "https://ticket.ibon.com.tw/ActivityInfo/Details/39611";
         IbonCrawler ibonCrawler = new IbonCrawler(url);
 
