@@ -273,15 +273,15 @@ public class MainApp extends Application {
         // 開始後刷新歷史清單（顯示本次新增的紀錄）
         refreshHistoryList();
 
-        monitor = new TicketMonitor(url, keyword, message -> {
-            appendLog(message);
+        monitor = new TicketMonitor(url, keyword, event -> {
+            appendLog(event.message);
 
-            if (message.contains("成功") || message.contains("釋票")) {
+            if (event.ticketFound) {
                 Platform.runLater(() ->
                     taskUIBridge.saveCurrentTask("TICKET_FOUND", soundManager.resolveSelectedSoundPath())
                 );
                 Thread notifyThread = new Thread(
-                    () -> notificationService.notifyTicketAvailable(url, message),
+                    () -> notificationService.notifyTicketAvailable(url, event.message),
                     "notify-thread"
                 );
                 notifyThread.setDaemon(true);

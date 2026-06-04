@@ -17,9 +17,7 @@ public class SystemNotificationService {
      */
     private String soundPath = SoundPlayer.DEFAULT_SENTINEL;
 
-    /** 上次發送通知的時間（毫秒），用於 30 秒冷卻期節流 */
-    private volatile long lastNotifyTime = 0;
-    private static final long NOTIFY_COOLDOWN_MS = 30_000;
+
 
     /** 通知 icon，從 resources 載入，失敗時為 null */
     private static final Image NOTIFY_ICON = loadIcon();
@@ -47,12 +45,6 @@ public class SystemNotificationService {
     // ── 主要公開方法 ──────────────────────────────────────────────────────────
 
     public void notifyTicketAvailable(String ticketUrl, String details) {
-        long now = System.currentTimeMillis();
-        if (now - lastNotifyTime < NOTIFY_COOLDOWN_MS) {
-            log("通知冷卻中（30 秒內不重複發送），略過此次通知。");
-            return;
-        }
-        lastNotifyTime = now;
 
         // 1. 播放音效（非同步，不阻塞 UI；空字串 → OS 預設音效）
         soundPlayer.playAsync(soundPath, this::log);
