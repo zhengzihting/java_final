@@ -4,7 +4,7 @@ import app.ticketData.TicketList;
 import java.util.Scanner;
 
 public class KktixCrawlerTest {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args){
         String url = "https://comedyclub.kktix.cc/events/alicefly", input;
         KktixCrawler kktixCrawler = new KktixCrawler(url);
         TicketList ticketList;

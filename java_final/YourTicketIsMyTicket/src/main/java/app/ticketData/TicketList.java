@@ -48,6 +48,10 @@ public class TicketList {
         else return true;
     }
 
+    public List<TicketsInfo> getTicketsInfo(){
+        return ticketsInfo;
+    }
+
     @Override
     public String toString(){
         String str = "";
