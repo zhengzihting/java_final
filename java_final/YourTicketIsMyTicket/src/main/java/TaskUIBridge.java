@@ -11,19 +11,16 @@ public class TaskUIBridge {
     private final TaskStorageService taskStorageService = new TaskStorageService();
 
     private final TextField urlInput;
-    private final TextField dateInput;
     private final TextField areaInput;
     private final TextField priceInput;
 
     private final Consumer<String> logger;
 
     public TaskUIBridge(TextField urlInput,
-                        TextField dateInput,
                         TextField areaInput,
                         TextField priceInput,
                         Consumer<String> logger) {
         this.urlInput   = urlInput;
-        this.dateInput  = dateInput;
         this.areaInput  = areaInput;
         this.priceInput = priceInput;
         this.logger     = logger;
@@ -38,7 +35,6 @@ public class TaskUIBridge {
         try {
             taskStorageService.loadLatestTask().ifPresentOrElse(task -> {
                 urlInput.setText(task.url);
-                dateInput.setText(task.date);
                 areaInput.setText(task.area);
                 priceInput.setText(task.price);
                 if (task.soundPath != null && !task.soundPath.isBlank()) {
@@ -64,7 +60,6 @@ public class TaskUIBridge {
 
         TaskStorageService.StoredTask task = TaskStorageService.StoredTask.fromInputs(
                 url,
-                dateInput.getText(),
                 areaInput.getText(),
                 priceInput.getText(),
                 status,
