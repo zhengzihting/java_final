@@ -8,18 +8,16 @@ public class NotificationTestHelper {
     public static final String DEFAULT_URL   = "http://127.0.0.1:8088/";
     public static final String DEFAULT_AREA  = "特A區";
     public static final String DEFAULT_PRICE = "4800";
-    public static final String DEFAULT_DATE  = "2026-06-20";
 
     /** 從使用者輸入欄位建立模擬通知資料，空白時套用預設值。 */
     public static NotificationPayload build(String url, String area, String price, String date) {
         String resolvedUrl   = (url   != null && url.startsWith("http")) ? url   : DEFAULT_URL;
         String resolvedArea  = (area  != null && !area.trim().isEmpty())  ? area  : DEFAULT_AREA;
         String resolvedPrice = (price != null && !price.trim().isEmpty()) ? price : DEFAULT_PRICE;
-        String resolvedDate  = (date  != null && !date.trim().isEmpty())  ? date  : DEFAULT_DATE;
 
         String details = String.format(
-            "[模擬] 偵測到釋票 — 區域：%s，票價：NT$ %s，日期：%s",
-            resolvedArea, resolvedPrice, resolvedDate
+            "[模擬] 偵測到釋票 — 區域：%s，票價：NT$ %s",
+            resolvedArea, resolvedPrice
         );
 
         return new NotificationPayload(resolvedUrl, details);
