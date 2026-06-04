@@ -10,10 +10,6 @@ public class KktixCrawler extends TicketWebCrawler {
         super(url);
     }
 
-    public boolean haveTicket(){
-        return false;
-    }
-
     public TicketList crawlTickets() {
         TicketList ticketList = new TicketList();
         try{

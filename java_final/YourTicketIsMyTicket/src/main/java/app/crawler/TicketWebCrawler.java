@@ -55,6 +55,7 @@ public abstract class TicketWebCrawler {
     }
 
     public void closeCrawler(){
+        buyTicketPage.close();
         playwright.close();
     }
 }

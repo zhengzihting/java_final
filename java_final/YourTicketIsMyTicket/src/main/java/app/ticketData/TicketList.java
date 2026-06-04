@@ -2,55 +2,57 @@ package app.ticketData;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.AriaRole;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TicketList {
-    private final int MAXSIZE = 1000;
-    private TicketsInfo[] ticketsInfo = new TicketsInfo[MAXSIZE];
+    private List<TicketsInfo> ticketsInfo = new ArrayList<>();
     private final Pattern pricePattern = Pattern.compile("\\d+");
-    private int ticketsCount;
 
     public void setTickets(List<Locator> ticketUnits) throws NullPointerException{
         Matcher m;
-        String ticketType, ticketPriceStr;
+        String ticketType, ticketPriceStr, getPriceNumber;
         int ticketPrice;
-        Locator ticketStatus;
+        Locator statusContent;
+        TicketsInfo.StatusType ticketStatus;
 
-        ticketsCount = 0;
         for(Locator ticketUnit: ticketUnits){
-            ticketsInfo[ticketsCount] = new TicketsInfo();
-
             ticketType = ticketUnit.locator("span.ticket-name").innerText();
-            ticketsInfo[ticketsCount].setTicketType(ticketType);
 
             ticketPriceStr = ticketUnit.locator("span.ticket-price").innerText();
             m = pricePattern.matcher(ticketPriceStr);
-            while(m.find()){
-               ticketPriceStr = new StringBuilder().append(m.group()).toString();
+            ticketPrice = 0;
+            for(int d = 0; m.find(); d++){
+                getPriceNumber = ticketPriceStr.substring(m.start(), m.end());
+               ticketPrice = (int)(ticketPrice*Math.pow(1000, d)) + Integer.parseInt(getPriceNumber);
             }
-            ticketPrice = Integer.parseInt(ticketPriceStr);
-            ticketsInfo[ticketsCount].setTicketPrice(ticketPrice);
 
-            ticketStatus = ticketUnit.locator("span.ticket-quantity");
-            if(ticketStatus.getByRole(AriaRole.BUTTON).first().isVisible()){
-                ticketsInfo[ticketsCount].setTicketStatus(TicketsInfo.StatusType.SELLING);
-            }else if(ticketStatus.getByText("已售完").isVisible()){
-                ticketsInfo[ticketsCount].setTicketStatus(TicketsInfo.StatusType.SOLD_OUT);
-            }else if(ticketStatus.getByText("結束販售").isVisible()){
-                ticketsInfo[ticketsCount].setTicketStatus(TicketsInfo.StatusType.CLOSED);
+            statusContent = ticketUnit.locator("span.ticket-quantity");
+            if(statusContent.getByRole(AriaRole.BUTTON).first().isVisible()){
+                ticketStatus = TicketsInfo.StatusType.SELLING;
+            }else if(statusContent.getByText("已售完").isVisible()){
+                ticketStatus = TicketsInfo.StatusType.SOLD_OUT;
+            }else if(statusContent.getByText("結束販售").isVisible()){
+                ticketStatus = TicketsInfo.StatusType.CLOSED;
             }else throw new NullPointerException();
 
-            ticketsCount++;
+            ticketsInfo.add(new TicketsInfo(ticketType, ticketPrice, ticketStatus));
         }
+    }
+
+    public boolean haveTicket(){
+        if(ticketsInfo.isEmpty()) return false;
+        else return true;
     }
 
     @Override
     public String toString(){
         String str = "";
-        for(int c = 0; c < ticketsCount; c++){
-            str += ticketsInfo[c].toString();
+        for(TicketsInfo ticket: ticketsInfo){
+            str += ticket;
         }
         return str;
     }

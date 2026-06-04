@@ -7,6 +7,12 @@ public class TicketsInfo {
     private int ticketPrice;
     private StatusType ticketStatus;
 
+    public TicketsInfo(String ticketType, int ticketPrice, StatusType ticketStatus){
+        this.ticketType = ticketType;
+        this.ticketPrice = ticketPrice;
+        this.ticketStatus = ticketStatus;
+    }
+
     public void setTicketType(String ticketType) {
         this.ticketType = ticketType;
     }
