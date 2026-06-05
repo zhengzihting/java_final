@@ -1,7 +1,6 @@
 package app.crawler;
 
 import app.ticketData.TicketList;
-
 import java.util.Scanner;
 
 public class simulateRefreshAndCrawl {
