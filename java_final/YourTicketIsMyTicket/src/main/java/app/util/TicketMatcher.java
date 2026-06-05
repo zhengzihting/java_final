@@ -1,3 +1,6 @@
+package app.util;
+
+import app.main.MainApp;
 import app.ticketData.TicketsInfo;
 
 /**

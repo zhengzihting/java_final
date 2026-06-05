@@ -1,3 +1,7 @@
+package app.controller;
+
+import app.main.MainApp;
+import app.service.TaskStorageService;
 import javafx.scene.control.TextField;
 
 import java.util.function.Consumer;
@@ -43,6 +47,36 @@ public class TaskUIBridge {
             }, () -> {});
         } catch (Exception e) {
             logger.accept("無法讀取本地任務記憶：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 解析監控條件字串並直接填回輸入欄位。
+     * 格式：網址：xxx　日期：xxx　區域：xxx　票價：xxx
+     */
+    public void parseAndRestoreRecord(String message) {
+        try {
+            String[] parts = message.split("　");
+            String url   = "";
+            String area  = "";
+            String price = "";
+
+            for (String part : parts) {
+                if (part.startsWith("網址："))       url   = part.substring(3).trim();
+                else if (part.startsWith("區域：")) area  = part.substring(3).trim();
+                else if (part.startsWith("票價：")) price = part.substring(3).trim();
+            }
+
+            if (url.isEmpty()) return;
+
+            final String fUrl = url, fArea = area, fPrice = price;
+            javafx.application.Platform.runLater(() -> {
+                urlInput.setText(fUrl);
+                areaInput.setText(fArea);
+                priceInput.setText(fPrice);
+            });
+        } catch (Exception ignored) {
+            // 格式不符則靜默忽略
         }
     }
 

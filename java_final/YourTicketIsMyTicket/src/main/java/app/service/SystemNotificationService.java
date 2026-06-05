@@ -1,3 +1,4 @@
+package app.service;
 import dorkbox.notify.Notify;
 import dorkbox.notify.Position;
 import java.awt.*;

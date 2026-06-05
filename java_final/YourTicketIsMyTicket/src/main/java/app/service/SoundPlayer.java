@@ -1,3 +1,4 @@
+package app.service;
 import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

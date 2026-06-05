@@ -1,3 +1,7 @@
+package app.service;
+
+import app.main.MainApp;
+import app.view.SoundToggleSwitch;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;

@@ -1,3 +1,4 @@
+package app.view;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

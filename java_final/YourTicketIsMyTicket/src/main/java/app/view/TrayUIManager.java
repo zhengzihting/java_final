@@ -1,3 +1,4 @@
+package app.view;
 import javafx.animation.FadeTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;

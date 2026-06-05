@@ -1,3 +1,6 @@
+package app.model;
+
+import app.service.TicketMonitor;
 /**
  * 監控事件，由 TicketMonitor 透過 callback 傳回。
  * 以結構化欄位取代魔法字串比對，讓呼叫端可直接讀取 ticketFound
