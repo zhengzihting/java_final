@@ -152,12 +152,17 @@ public class MainApp extends Application {
         colTime.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().timestamp));
         colTime.setPrefWidth(140);
 
+       colUrl.setPrefWidth(245); 
+
+        // 欄位加入表格
         historyTableView.getColumns().addAll(colArea, colPrice, colTime, colUrl);
         refreshHistoryList();
 
+        // 修正點 2：設定 TableView 的總寬度，剛剛好卡死所有欄位 + 滾動條寬度
         historyTableView.setPrefWidth(550);
         historyTableView.setMaxWidth(550);
-        
+
+        // 修正點 3：乾淨的視覺修正，將沒用的灰色填充塊隱形，讓滑軌無縫貼近
         historyTableView.setStyle(
             "-fx-background-color: transparent; " +
             ".table-view .filler { -fx-background-color: transparent; -fx-border-color: transparent; }"
@@ -177,7 +182,7 @@ public class MainApp extends Application {
         // --- 初始化協作物件 ---
         notificationService = new SystemNotificationService(this::appendLog);
         soundManager  = new SoundManager(soundPathLabel, notificationService, this::appendLog);
-        taskUIBridge  = new TaskUIBridge(urlInput, dateInput, areaInput, priceInput, this::appendLog);
+        taskUIBridge  = new TaskUIBridge(urlInput, areaInput, priceInput, this::appendLog);
 
         // 還原上次任務（含音效）
         taskUIBridge.restoreLatestTask(savedPath -> {
@@ -270,7 +275,8 @@ public class MainApp extends Application {
         // 開始後刷新歷史清單（顯示本次新增的紀錄）
         refreshHistoryList();
 
-        monitor = new TicketMonitor(url, keyword, event -> {
+        monitor = new TicketMonitor(url, keyword, (MonitorEvent event) -> {
+            // 完美咬合：直接讀取公開變數 event.message 與 event.ticketFound 欄位！
             appendLog(event.message);
 
             if (event.ticketFound) {
@@ -304,7 +310,7 @@ public class MainApp extends Application {
         NotificationTestHelper.NotificationPayload payload = NotificationTestHelper.build(
             urlInput.getText().trim(),
             areaInput.getText().trim(),
-            priceInput.getText().trim(),
+            priceInput.getText().trim()
         );
 
         appendLog("▶ 發送模擬通知測試...");
@@ -361,7 +367,7 @@ public class MainApp extends Application {
 
             if (url.isEmpty()) return;
 
-            final String fUrl = url, fDate = date, fArea = area, fPrice = price;
+            final String fUrl = url, fArea = area, fPrice = price;
             Platform.runLater(() -> {
                 urlInput.setText(fUrl);
                 areaInput.setText(fArea);
