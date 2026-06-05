@@ -10,7 +10,7 @@ public class NotificationTestHelper {
     public static final String DEFAULT_PRICE = "4800";
 
     /** 從使用者輸入欄位建立模擬通知資料，空白時套用預設值。 */
-    public static NotificationPayload build(String url, String area, String price, String date) {
+    public static NotificationPayload build(String url, String area, String price) {
         String resolvedUrl   = (url   != null && url.startsWith("http")) ? url   : DEFAULT_URL;
         String resolvedArea  = (area  != null && !area.trim().isEmpty())  ? area  : DEFAULT_AREA;
         String resolvedPrice = (price != null && !price.trim().isEmpty()) ? price : DEFAULT_PRICE;
