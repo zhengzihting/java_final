@@ -21,7 +21,6 @@ public class MainApp extends Application {
 
     // 輸入欄位
     private TextField urlInput;
-    private TextField dateInput;
     private TextField areaInput;
     private TextField priceInput;
 
@@ -73,11 +72,6 @@ public class MainApp extends Application {
         urlInput.setPromptText("https://...");
         urlInput.setPrefWidth(350);
         addGridRow(inputGrid, "售票網址：", urlInput, 0);
-
-        // 查詢日期
-        dateInput = new TextField();
-        dateInput.setPromptText("例如：2026-05-20");
-        addGridRow(inputGrid, "查詢日期：", dateInput, 1);
 
         // 查詢區域
         areaInput = new TextField();
@@ -138,10 +132,6 @@ public class MainApp extends Application {
         historyTableView.setPlaceholder(new Label("目前尚無監控條件紀錄"));
 
         // 欄位定義
-        TableColumn<DatabaseManager.HistoryEntry, String> colDate = new TableColumn<>("日期");
-        colDate.setCellValueFactory(d -> new SimpleStringProperty(
-                parseField(d.getValue().message, "日期：")));
-        colDate.setPrefWidth(90);
 
         TableColumn<DatabaseManager.HistoryEntry, String> colArea = new TableColumn<>("區域");
         colArea.setCellValueFactory(d -> new SimpleStringProperty(
@@ -162,7 +152,7 @@ public class MainApp extends Application {
         colTime.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().timestamp));
         colTime.setPrefWidth(140);
 
-        historyTableView.getColumns().addAll(colDate, colArea, colPrice, colTime, colUrl);
+        historyTableView.getColumns().addAll(colArea, colPrice, colTime, colUrl);
         refreshHistoryList();
 
         // 點選即套用（單擊）
@@ -263,9 +253,8 @@ public class MainApp extends Application {
         taskUIBridge.saveCurrentTask("RUNNING", soundManager.resolveSelectedSoundPath());
 
         // 存入使用者這次的監控條件
-        String inputRecord = String.format("網址：%s　日期：%s　區域：%s　票價：%s",
+        String inputRecord = String.format("網址：%s　區域：%s　票價：%s",
                 url,
-                dateInput.getText().trim(),
                 areaInput.getText().trim(),
                 priceInput.getText().trim());
         DatabaseManager.saveLog(inputRecord);
@@ -308,7 +297,6 @@ public class MainApp extends Application {
             urlInput.getText().trim(),
             areaInput.getText().trim(),
             priceInput.getText().trim(),
-            dateInput.getText().trim()
         );
 
         appendLog("▶ 發送模擬通知測試...");
@@ -354,13 +342,11 @@ public class MainApp extends Application {
         try {
             String[] parts = message.split("　");
             String url   = "";
-            String date  = "";
             String area  = "";
             String price = "";
 
             for (String part : parts) {
                 if (part.startsWith("網址："))       url   = part.substring(3).trim();
-                else if (part.startsWith("日期：")) date  = part.substring(3).trim();
                 else if (part.startsWith("區域：")) area  = part.substring(3).trim();
                 else if (part.startsWith("票價：")) price = part.substring(3).trim();
             }
@@ -370,7 +356,6 @@ public class MainApp extends Application {
             final String fUrl = url, fDate = date, fArea = area, fPrice = price;
             Platform.runLater(() -> {
                 urlInput.setText(fUrl);
-                dateInput.setText(fDate);
                 areaInput.setText(fArea);
                 priceInput.setText(fPrice);
             });
@@ -397,7 +382,6 @@ public class MainApp extends Application {
         startBtn.setDisable(isRunning);
         stopBtn.setDisable(!isRunning);  // 開始監控 → enable；停止監控 → disable
         urlInput.setDisable(isRunning);
-        dateInput.setDisable(isRunning);
         areaInput.setDisable(isRunning);
         priceInput.setDisable(isRunning);
     }
