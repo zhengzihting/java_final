@@ -10,37 +10,43 @@ public class TicketMatcher {
     private final int price;     // 0 代表不限票價
 
     /**
-     * @param keyword MainApp 組出的條件字串，格式為 "日期 區域 票價"，
-     *                各欄位可為空，空白分隔。例："2026-05-20 特A區 4800"
+     * @param keyword MainApp 組出的條件字串，格式為 "區域 票價"
      */
     public TicketMatcher(String keyword) {
         String parsedArea  = "";
         int    parsedPrice = 0;
 
         if (keyword != null && !keyword.isBlank()) {
-            for (String token : keyword.trim().split("\\s+")) {
-                if (token.isEmpty()) continue;
-
-                if (token.matches("\\d+")) {
-                    // 純數字 → 票價
-                    parsedPrice = Integer.parseInt(token);
+            String trimmed = keyword.trim();
+            int lastSpaceIdx = trimmed.lastIndexOf(" ");
+            
+            if (lastSpaceIdx - 1 >= 0) {
+                String pricePart = trimmed.substring(lastSpaceIdx + 1);
+                String areaPart  = trimmed.substring(0, lastSpaceIdx);
+                
+                if (pricePart.matches("\\d+")) {
+                    parsedPrice = Integer.parseInt(pricePart);
+                    parsedArea  = areaPart.trim();
                 } else {
-                    // 其餘文字 → 區域（若有多個非數字 token 則以最後一個為準）
-                    parsedArea = token;
+                    parsedArea  = trimmed;
+                }
+            } else {
+                // 如果中間完全沒有空格
+                if (trimmed.matches("\\d+")) {
+                    parsedPrice = Integer.parseInt(trimmed);
+                } else {
+                    parsedArea  = trimmed;
                 }
             }
         }
 
-        this.area  = parsedArea;
+        //核心修正防禦點 1：將區域內的空白壓縮、並轉為純小寫，確保對接時萬無一失
+        this.area  = parsedArea.replaceAll("\\s+", "").toLowerCase();
         this.price = parsedPrice;
     }
 
     /**
      * 判斷指定票務資訊是否符合全部設定的篩選條件。
-     * 空條件（date / area 為空字串，price 為 0）會自動跳過對應欄位的比對。
-     *
-     * @param ticket 爬蟲取得的單筆票務資訊
-     * @return 符合所有非空條件且狀態為 SELLING 時回傳 true
      */
     public boolean matches(TicketsInfo ticket) {
         // 1. 必須為販售中狀態
@@ -48,9 +54,10 @@ public class TicketMatcher {
             return false;
         }
 
-        String ticketType = ticket.getTicketType();
+        //核心修正防禦點 2：同樣將網頁抓到的類型去除所有空格並轉小寫，進行模糊 contain 比對！
+        String ticketType = ticket.getTicketType() != null ? ticket.getTicketType().replaceAll("\\s+", "").toLowerCase() : "";
 
-        // 2. 區域比對（有設條件才比）
+        // 2. 區域比對（去空格、不分大小寫，齒輪完美咬合！）
         if (!area.isEmpty() && !ticketType.contains(area)) {
             return false;
         }
