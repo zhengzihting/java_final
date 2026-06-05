@@ -1,3 +1,4 @@
+import java.util.List;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -8,9 +9,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.util.List;
-
 public class MainApp extends Application {
+
+    /** UI 的三個狀態：初始 / 等待使用者登入 / 監控中 */
+    private enum UiState { IDLE, WAITING_LOGIN, RUNNING }
+    private UiState uiState = UiState.IDLE;
 
     // 監控系統列與懸浮日誌管理器
     private TrayUIManager trayUIManager;
@@ -108,7 +111,7 @@ public class MainApp extends Application {
         inputGrid.add(soundPathLabel, 1, 5);
 
         // --- 4. 按鈕區域 (HBox 橫向排列) ---
-        startBtn = new Button("開始監控");
+        startBtn = new Button("開啟瀏覽器");
         stopBtn = new Button("停止");
         Button testNotifyBtn = new Button("測試通知");
 
@@ -220,7 +223,7 @@ public class MainApp extends Application {
 
         // 視窗設定
         Scene scene = new Scene(mainLayout, 620, 680);
-        primaryStage.setTitle("Ticket Monitor 監控系統 v3.0");
+        primaryStage.setTitle("Ticket Monitor 監控系統 v5.0");
         primaryStage.setScene(scene);
 
         primaryStage.setOnCloseRequest(e -> {
@@ -254,13 +257,12 @@ public class MainApp extends Application {
             return;
         }
 
-        setUIRunning(true);
-
         trayUIManager.clearLog();
         trayUIManager.showFloatingLogIfNotShowing();
 
-        appendLog("正在啟動監控... 目標條件：[" + keyword + "]");
-        taskUIBridge.saveCurrentTask("RUNNING", soundManager.resolveSelectedSoundPath());
+        // 先鎖定輸入欄，顯示「開啟瀏覽器中...」
+        setUIState(UiState.WAITING_LOGIN);
+        appendLog("正在開啟瀏覽器... 目標條件：[" + keyword + "]");
 
         // 存入使用者這次的監控條件
         String inputRecord = String.format("網址：%s　區域：%s　票價：%s",
@@ -268,12 +270,9 @@ public class MainApp extends Application {
                 areaInput.getText().trim(),
                 priceInput.getText().trim());
         DatabaseManager.saveLog(inputRecord);
-
-        // 開始後刷新歷史清單（顯示本次新增的紀錄）
         refreshHistoryList();
 
         monitor = new TicketMonitor(url, keyword, (MonitorEvent event) -> {
-            // 完美咬合：直接讀取公開變數 event.message 與 event.ticketFound 欄位！
             appendLog(event.message);
 
             if (event.ticketFound) {
@@ -289,18 +288,31 @@ public class MainApp extends Application {
             }
         });
 
-        monitor.startMonitoring(10);
+        // Phase 1：只開瀏覽器，等 onReady 後才切成 WAITING_LOGIN 文字提示
+        monitor.prepareMonitoring(() -> {
+            // 此時瀏覽器已就緒，UI 已在 WAITING_LOGIN，不需再切換
+            // （prepareMonitoring 會透過 callback 顯示登入提示訊息）
+        });
+    }
+
+    /** Phase 2：使用者在瀏覽器完成登入後按下「確認已登入」時呼叫。 */
+    private void handleLoginConfirmed() {
+        if (monitor == null || uiState != UiState.WAITING_LOGIN) return;
+
+        setUIState(UiState.RUNNING);
+        taskUIBridge.saveCurrentTask("RUNNING", soundManager.resolveSelectedSoundPath());
+        monitor.beginMonitoring(10);
     }
 
     private void handleStop() {
         if (monitor != null) {
             monitor.stopMonitoring();
-            appendLog("使用者手動停止監控。");
-            taskUIBridge.saveCurrentTask("STOPPED", soundManager.resolveSelectedSoundPath());
-            setUIRunning(false);
-            // 停止後刷新歷史清單
-            refreshHistoryList();
+            monitor = null;
         }
+        appendLog("使用者手動停止監控。");
+        taskUIBridge.saveCurrentTask("STOPPED", soundManager.resolveSelectedSoundPath());
+        setUIState(UiState.IDLE);
+        refreshHistoryList();
     }
 
     private void handleTestNotification() {
@@ -389,12 +401,47 @@ public class MainApp extends Application {
         grid.add(control, 1, row);
     }
 
-    private void setUIRunning(boolean isRunning) {
-        startBtn.setDisable(isRunning);
-        stopBtn.setDisable(!isRunning);  // 開始監控 → enable；停止監控 → disable
-        urlInput.setDisable(isRunning);
-        areaInput.setDisable(isRunning);
-        priceInput.setDisable(isRunning);
+    /**
+     * 依據 UI 狀態設定按鈕文字、事件、及輸入欄的啟用狀態。
+     * <ul>
+     *   <li>IDLE：初始狀態，可輸入條件、可按「開始監控」</li>
+     *   <li>WAITING_LOGIN：瀏覽器已開啟，等待登入；startBtn 顯示「確認已登入」</li>
+     *   <li>RUNNING：監控進行中，所有輸入禁用</li>
+     * </ul>
+     */
+    private void setUIState(UiState state) {
+        uiState = state;
+        switch (state) {
+            case IDLE:
+                startBtn.setText("開啟瀏覽器");
+                startBtn.setOnAction(e -> handleStart());
+                startBtn.setDisable(false);
+                stopBtn.setDisable(true);
+                urlInput.setDisable(false);
+                areaInput.setDisable(false);
+                priceInput.setDisable(false);
+                break;
+
+            case WAITING_LOGIN:
+                startBtn.setText("開始監控");
+                startBtn.setOnAction(e -> handleLoginConfirmed());
+                startBtn.setDisable(false);   // 使用者可點擊確認
+                stopBtn.setDisable(false);    // 也可以取消
+                urlInput.setDisable(false);   // 確認前仍可修改監控條件
+                areaInput.setDisable(false);
+                priceInput.setDisable(false);
+                break;
+
+            case RUNNING:
+                startBtn.setText("監控中");
+                startBtn.setOnAction(e -> handleStart());
+                startBtn.setDisable(true);    // 監控中不能重新開始
+                stopBtn.setDisable(false);
+                urlInput.setDisable(true);
+                areaInput.setDisable(true);
+                priceInput.setDisable(true);
+                break;
+        }
     }
 
     private void appendLog(String message) {

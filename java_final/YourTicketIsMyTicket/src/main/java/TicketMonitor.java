@@ -1,12 +1,11 @@
+import app.crawler.KktixCrawler;
+import app.ticketData.TicketList;
+import app.ticketData.TicketsInfo;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
-
-import app.crawler.KktixCrawler;
-import app.ticketData.TicketList;
-import app.ticketData.TicketsInfo;
 import javafx.application.Platform;
 
 /**
@@ -14,8 +13,19 @@ import javafx.application.Platform;
  * 負責管理 KktixCrawler 的生命週期，並以固定間隔輪詢票務狀態。
  * 比對邏輯委由 {@link TicketMatcher} 處理；
  * 結果以 {@link MonitorEvent} 封裝後透過 callback 回報給 UI 層。
+ *
+ * <p><b>兩階段啟動流程：</b>
+ * <ol>
+ *   <li>{@link #prepareMonitoring(Runnable)} — 開啟瀏覽器（導向 KKTIX 首頁），
+ *       等待使用者手動登入。瀏覽器就緒後呼叫 {@code onReady}。</li>
+ *   <li>{@link #beginMonitoring(int)} — 使用者確認登入後呼叫，
+ *       將頁面導向目標票務 URL 並啟動定時輪詢。</li>
+ * </ol>
  */
 public class TicketMonitor {
+
+    /** KKTIX 登入頁：Phase 1 開啟瀏覽器時先導向此頁，讓使用者登入。 */
+    private static final String KKTIX_HOME = "https://kktix.com/users/sign_in";
 
     private final String url;
     private final String keyword;
@@ -37,26 +47,69 @@ public class TicketMonitor {
         this.callback = callback;
     }
 
+    // -------------------------------------------------------------------------
+    // Phase 1：開啟瀏覽器，等待使用者登入
+    // -------------------------------------------------------------------------
+
     /**
-     * 啟動監控。
-     * 先在 daemon thread 中開啟 Chrome（阻塞），完成後再啟動定時輪詢。
+     * Phase 1：在背景開啟 Chrome 並導向 KKTIX 首頁，讓使用者可手動登入。
+     * 瀏覽器成功連線後呼叫 {@code onReady}（在 JavaFX Application Thread 執行）。
      *
-     * @param intervalSeconds 每次輪詢的間隔秒數
+     * <p>若瀏覽器啟動失敗，會透過 callback 回報錯誤訊息，且不呼叫 {@code onReady}。
+     *
+     * @param onReady 瀏覽器就緒後的回呼，通常用於切換 UI 狀態為「等待登入確認」
      */
-    public void startMonitoring(int intervalSeconds) {
-        TicketMatcher matcher = new TicketMatcher(keyword);
+    public void prepareMonitoring(Runnable onReady) {
+        isStopped = false;
 
         Thread initThread = new Thread(() -> {
             try {
-                crawler = new KktixCrawler(url);
+                crawler = new KktixCrawler(KKTIX_HOME);
                 crawler.startCrawler();
+
+                Platform.runLater(() -> {
+                    callback.accept(MonitorEvent.log(
+                        "瀏覽器已開啟，請完成登入。"));
+                    onReady.run();
+                });
+
+            } catch (Exception e) {
+                Platform.runLater(() ->
+                    callback.accept(MonitorEvent.log("瀏覽器啟動失敗：" + e.getMessage()))
+                );
+            }
+        }, "crawler-init-thread");
+
+        initThread.setDaemon(true);
+        initThread.start();
+    }
+
+    // -------------------------------------------------------------------------
+    // Phase 2：使用者確認登入後，navigate 並開始輪詢
+    // -------------------------------------------------------------------------
+
+    /**
+     * Phase 2：將瀏覽器導向目標票務 URL，並啟動定時輪詢。
+     * 必須在 {@link #prepareMonitoring(Runnable)} 的 {@code onReady} 回呼之後呼叫。
+     *
+     * @param intervalSeconds 每次輪詢的基準間隔秒數（實際會加入隨機浮動）
+     */
+    public void beginMonitoring(int intervalSeconds) {
+        if (isStopped || crawler == null) return;
+
+        TicketMatcher matcher = new TicketMatcher(keyword);
+
+        Thread navigateThread = new Thread(() -> {
+            try {
+                // 將頁面導向真正的票務 URL
+                crawler.getBuyTicketPage().navigate(url);
+
                 Platform.runLater(() ->
                     callback.accept(MonitorEvent.log(
-                        "爬蟲已啟動，開始監控目標：" + url + "　條件：" + matcher))
+                        "開始監控目標：" + url + "　條件：" + matcher))
                 );
 
-                // 瀏覽器就緒後才啟動定時器
-                // 首輪立即執行（delay=0），後續才套用隨機延遲
+                // 頁面就緒後啟動定時器，首輪立即執行
                 timer = new Timer(true);
                 timer.schedule(new TimerTask() {
                     @Override
@@ -68,25 +121,32 @@ public class TicketMonitor {
 
             } catch (Exception e) {
                 Platform.runLater(() ->
-                    callback.accept(MonitorEvent.log("爬蟲啟動失敗：" + e.getMessage()))
+                    callback.accept(MonitorEvent.log("導向票務頁面失敗：" + e.getMessage()))
                 );
             }
-        }, "crawler-init-thread");
+        }, "crawler-navigate-thread");
 
-        initThread.setDaemon(true);
-        initThread.start();
+        navigateThread.setDaemon(true);
+        navigateThread.start();
     }
+
+    // -------------------------------------------------------------------------
+    // 停止監控
+    // -------------------------------------------------------------------------
 
     /**
      * 停止監控，並關閉爬蟲所開啟的瀏覽器。
+     * 可在 Phase 1（等待登入）或 Phase 2（輪詢中）任意時機呼叫。
      */
     public void stopMonitoring() {
         if (isStopped) return;
         isStopped = true;
+
         if (timer != null) {
             timer.cancel();
             timer = null;
         }
+
         if (crawler != null) {
             final KktixCrawler crawlerRef = crawler;
             crawler = null;
@@ -106,6 +166,9 @@ public class TicketMonitor {
         }
     }
 
+    // -------------------------------------------------------------------------
+    // 內部：定時輪詢邏輯
+    // -------------------------------------------------------------------------
 
     /**
      * 以隨機延遲排定下一輪爬取。
@@ -126,7 +189,6 @@ public class TicketMonitor {
     /**
      * 計算下一輪的隨機延遲（毫秒）。
      * 範圍為基準秒數的 60 %～140 %，讓間隔自然浮動。
-     * 例如基準 10 秒 → 實際 6～14 秒之間隨機。
      */
     private long nextDelayMs(int baseSeconds) {
         double factor = 0.6 + random.nextDouble() * 0.8; // [0.6, 1.4)
@@ -207,11 +269,8 @@ public class TicketMonitor {
         }
     }
 
-
     /**
      * 判斷異常是否為「瀏覽器/頁面已被關閉」。
-     * Playwright 遇到已關閉的 target 時會拋出 PlaywrightException，
-     * 訊息內容通常包含 "closed"、"disconnect" 等關鍵字。
      */
     private boolean isBrowserClosed(Exception e) {
         String cls = e.getClass().getName().toLowerCase();
@@ -220,23 +279,20 @@ public class TicketMonitor {
             msg.contains("closed") ||
             msg.contains("disconnect") ||
             msg.contains("crash") ||
-            msg.contains("target")   // "Target page, context or browser has been closed"
+            msg.contains("target")
         );
     }
 
     /**
      * 判斷票券是否在「區域 / 票價」條件上符合，但忽略售出狀態。
-     * 用於偵測「符合條件但已售完」的情況，以便在 log 中提示使用者。
      */
     private boolean matchesIgnoreStatus(TicketMatcher matcher, TicketsInfo ticket) {
         String ticketType = ticket.getTicketType();
 
-        // 區域比對（有設條件才比）
         if (!matcher.getArea().isEmpty() && !ticketType.contains(matcher.getArea())) {
             return false;
         }
 
-        // 票價比對（有設條件才比）
         if (matcher.getPrice() > 0 && ticket.getTicketPrice() != matcher.getPrice()) {
             return false;
         }
