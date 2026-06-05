@@ -1,13 +1,19 @@
-
+import javafx.animation.FadeTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
 import java.awt.SystemTray;
@@ -53,7 +59,11 @@ public class TrayUIManager {
             if (statusLabel == null || detailsLabel == null) return;
 
             // 1. 把舊的訊息推到下方詳細欄，新訊息放上方主標題
-            detailsLabel.setText(statusLabel.getText());
+            if (!statusLabel.getText().equals("目前無監控活動...")) {
+                detailsLabel.setText(statusLabel.getText());
+            } else {
+                detailsLabel.setText("系統正在背景穩定執行中...");
+            }
             statusLabel.setText(message);
 
             // 2. 智慧燈號判斷
