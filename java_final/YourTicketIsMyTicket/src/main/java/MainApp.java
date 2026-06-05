@@ -163,10 +163,7 @@ public class MainApp extends Application {
         historyTableView.setMaxWidth(550);
 
         // 修正點 3：乾淨的視覺修正，將沒用的灰色填充塊隱形，讓滑軌無縫貼近
-        historyTableView.setStyle(
-            "-fx-background-color: transparent; " +
-            ".table-view .filler { -fx-background-color: transparent; -fx-border-color: transparent; }"
-        );
+        historyTableView.setStyle("-fx-background-color: transparent;");
 
         // 點選即套用（單擊）
         historyTableView.setOnMouseClicked(e -> {
