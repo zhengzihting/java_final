@@ -76,12 +76,12 @@ public class MainApp extends Application {
         // 查詢區域
         areaInput = new TextField();
         areaInput.setPromptText("例如：特A區");
-        addGridRow(inputGrid, "查詢區域：", areaInput, 2);
+        addGridRow(inputGrid, "查詢區域：", areaInput, 1);
 
         // 查詢票價
         priceInput = new TextField();
         priceInput.setPromptText("例如：4800");
-        addGridRow(inputGrid, "查詢票價：", priceInput, 3);
+        addGridRow(inputGrid, "查詢票價：", priceInput, 2);
 
         // --- 3. 音效選擇列（放入 inputGrid 對齊其他欄位）---
         soundPathLabel = new Label(SoundPlayer.defaultDisplayLabel());
@@ -154,6 +154,14 @@ public class MainApp extends Application {
 
         historyTableView.getColumns().addAll(colArea, colPrice, colTime, colUrl);
         refreshHistoryList();
+
+        historyTableView.setPrefWidth(550);
+        historyTableView.setMaxWidth(550);
+        
+        historyTableView.setStyle(
+            "-fx-background-color: transparent; " +
+            ".table-view .filler { -fx-background-color: transparent; -fx-border-color: transparent; }"
+        );
 
         // 點選即套用（單擊）
         historyTableView.setOnMouseClicked(e -> {
@@ -234,8 +242,8 @@ public class MainApp extends Application {
 
     private void handleStart() {
         String url = urlInput.getText().trim();
-        String keyword = String.format("%s %s %s",
-                dateInput.getText(), areaInput.getText(), priceInput.getText()).trim();
+        String keyword = String.format("%s %s",
+                areaInput.getText(), priceInput.getText()).trim();
 
         if (url.isEmpty() || !url.startsWith("http")) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "錯誤：請輸入有效的售票網址！", ButtonType.OK);
