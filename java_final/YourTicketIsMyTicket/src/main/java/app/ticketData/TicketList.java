@@ -30,11 +30,11 @@ public class TicketList {
             }
 
             statusContent = ticketUnit.locator("span.ticket-quantity");
-            if(statusContent.getByRole(AriaRole.BUTTON).first().isVisible()){
+            if(statusContent.getByRole(AriaRole.BUTTON).first().isVisible() || statusContent.getByText("需要資格").isVisible()){
                 ticketStatus = TicketsInfo.StatusType.SELLING;
             }else if(statusContent.getByText("已售完").isVisible()){
                 ticketStatus = TicketsInfo.StatusType.SOLD_OUT;
-            }else if(statusContent.getByText("結束販售").isVisible()){
+            }else if(statusContent.getByText("結束販售").isVisible() || statusContent.getByText("尚未開賣").isVisible()){
                 ticketStatus = TicketsInfo.StatusType.CLOSED;
             }else throw new NullPointerException();
 
