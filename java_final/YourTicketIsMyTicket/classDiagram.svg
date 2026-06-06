@@ -1,0 +1,408 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3108.007 2162" width="3108.007" height="2162" style="--bg:#1F1F1F;--fg:#CCCCCC;--line:#CCCCCC;--accent:#0078D4;--muted:#CCCCCCCC;--surface:#181818;--border:#CCCCCC;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  .mono { font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, monospace; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="cls-inherit" markerWidth="12" markerHeight="10" refX="12" refY="5" orient="auto-start-reverse">
+    <polygon points="0 0, 12 5, 0 10" fill="var(--bg)" stroke="var(--_arrow)" stroke-width="1.5" />
+  </marker>
+  <marker id="cls-composition" markerWidth="12" markerHeight="10" refX="0" refY="5" orient="auto-start-reverse">
+    <polygon points="6 0, 12 5, 6 10, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="1" />
+  </marker>
+  <marker id="cls-aggregation" markerWidth="12" markerHeight="10" refX="0" refY="5" orient="auto-start-reverse">
+    <polygon points="6 0, 12 5, 6 10, 0 5" fill="var(--bg)" stroke="var(--_arrow)" stroke-width="1.5" />
+  </marker>
+  <marker id="cls-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto-start-reverse">
+    <polyline points="0 0, 8 3, 0 6" fill="none" stroke="var(--_arrow)" stroke-width="1.5" />
+  </marker>
+</defs>
+<polyline class="class-relationship" data-from="TicketWebCrawler" data-to="KktixCrawler" data-type="inheritance" data-marker-at="from" points="215.03333333333336,1050 215.03333333333336,1060 354.33333333333337,1060 354.33333333333337,1190" fill="none" stroke="var(--_line)" stroke-width="1" marker-start="url(#cls-inherit)" />
+<polyline class="class-relationship" data-from="Application" data-to="MainApp" data-type="inheritance" data-marker-at="from" points="1695.2333333333333,1418 1695.2333333333333,1428 1653.4583333333333,1428 1653.4583333333333,1488" fill="none" stroke="var(--_line)" stroke-width="1" marker-start="url(#cls-inherit)" />
+<polyline class="class-relationship" data-from="StackPane" data-to="SoundToggleSwitch" data-type="inheritance" data-marker-at="from" points="396.1666666666667,1894 396.1666666666667,1904 932.5166666666667,1904 932.5166666666667,1954" fill="none" stroke="var(--_line)" stroke-width="1" marker-start="url(#cls-inherit)" />
+<polyline class="class-relationship" data-from="MainController" data-to="MonitorEvent" data-type="association" data-marker-at="to" points="493.48333333333335,448 493.48333333333335,598" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainController" data-to="DatabaseManager" data-type="association" data-marker-at="to" points="604.4166666666667,448 604.4166666666667,518 1573.1666666666665,518 1573.1666666666665,838" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainController" data-to="SoundManager" data-type="association" data-marker-at="to" points="548.95,448 548.95,538 1093.9666666666667,538 1093.9666666666667,1110" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainController" data-to="SystemNotificationService" data-type="association" data-marker-at="to" points="770.8166666666668,448 770.8166666666668,458 2852.107,458 2852.107,1478" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainController" data-to="TicketMonitor" data-type="association" data-marker-at="to" points="521.2166666666667,448 521.2166666666667,548 653.3833333333334,548 653.3833333333334,756 666.0166666666667,756 666.0166666666667,815.1428571428571" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainController" data-to="NotificationTestHelper" data-type="association" data-marker-at="to" points="576.6833333333334,448 576.6833333333334,528 1334.0666666666666,528 1334.0666666666666,558" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainController" data-to="HistoryTableManager" data-type="association" data-marker-at="to" points="632.1500000000001,448 632.1500000000001,508 1658.7201666666665,508 1658.7201666666665,628" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainController" data-to="MainView" data-type="association" data-marker-at="to" points="743.0833333333335,448 743.0833333333335,468 2625.207,468 2625.207,1676 1730.7666666666667,1676 1730.7666666666667,1726" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainController" data-to="TrayUIManager" data-type="association" data-marker-at="to" points="687.6166666666668,448 687.6166666666668,488 2375.1736666666666,488 2375.1736666666666,558" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainController" data-to="TaskUIBridge" data-type="association" data-marker-at="to" points="659.8833333333334,448 659.8833333333334,498 1989.1736666666666,498 1989.1736666666666,558" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TaskUIBridge" data-to="MainApp" data-type="association" data-marker-at="to" points="1917.2069999999999,746 1917.2069999999999,1438 1682.6833333333332,1438 1682.6833333333332,1488" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TaskUIBridge" data-to="TaskStorageService" data-type="association" data-marker-at="to" points="2061.1403333333333,746 2061.1403333333333,756 2266.207,756 2266.207,806" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TicketMonitor" data-to="MonitorEvent" data-type="association" data-marker-at="to" points="443.51666666666665,815.1428571428571 443.5166666666667,726" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TicketMonitor" data-to="TicketMatcher" data-type="association" data-marker-at="to" points="688.2666666666667,1043.142857142857 688.2666666666667,1060 750.8666666666667,1060 750.8666666666667,1216.6666666666667" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TicketMonitor" data-to="KktixCrawler" data-type="association" data-marker-at="to" points="421.26666666666665,1043.142857142857 421.26666666666665,1190" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TicketMonitor" data-to="TicketList" data-type="association" data-marker-at="to" points="510.26666666666665,1043.142857142857 510.26666666666665,1428 492.1333333333333,1428 492.1333333333333,1498" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TicketMonitor" data-to="TicketsInfo" data-type="association" data-marker-at="to" points="599.2666666666667,1043.142857142857 599.2666666666667,1060 606.4666666666667,1060 606.4666666666667,1726" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="DatabaseManager" data-to="MainApp" data-type="association" data-marker-at="to" points="1624.2333333333333,986 1624.2333333333333,1488" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="SoundManager" data-to="MainApp" data-type="association" data-marker-at="to" points="1178.8166666666666,1418 1178.8166666666666,1438 1565.7833333333333,1438 1565.7833333333333,1488" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="SoundManager" data-to="SoundToggleSwitch" data-type="association" data-marker-at="to" points="1009.1166666666667,1418 1009.1166666666666,1954" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="SoundManager" data-to="SoundPlayer" data-type="association" data-marker-at="to" points="1093.9666666666667,1418 1093.9666666666667,1914 1634.3666666666668,1914 1634.3666666666668,1954" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="SystemNotificationService" data-to="SoundPlayer" data-type="association" data-marker-at="to" points="2852.107,1666 2852.107,1904 1827.1666666666667,1904 1827.1666666666667,1954" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="HistoryTableManager" data-to="DatabaseManager" data-type="association" data-marker-at="to" points="1658.7201666666665,676 1658.7201666666665,756 1675.3,756 1675.3,838" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainView" data-to="SoundPlayer" data-type="association" data-marker-at="to" points="1730.7666666666667,1894 1730.7666666666667,1954" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainView" data-to="SoundToggleSwitch" data-type="association" data-marker-at="to" points="1624.2333333333333,1894 1624.2333333333333,1904 1359.1,1904 1359.1,1924 1085.7166666666667,1924 1085.7166666666667,1954" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TicketMatcher" data-to="MainApp" data-type="association" data-marker-at="to" points="795.3333333333334,1364.6666666666667 795.3333333333334,1448 1536.5583333333332,1448 1536.5583333333332,1488" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TicketMatcher" data-to="TicketsInfo" data-type="association" data-marker-at="to" points="706.4,1364.6666666666667 706.4,1676 661.6166666666667,1676 661.6166666666667,1726" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MonitorEvent" data-to="TicketMonitor" data-type="association" data-marker-at="to" points="543.45,726 543.45,756 554.7666666666667,756 554.7666666666667,815.1428571428571" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="KktixCrawler" data-to="TicketList" data-type="association" data-marker-at="to" points="387.8,1258 387.8,1498" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TicketWebCrawler" data-to="WebSocketEndPoint" data-type="association" data-marker-at="to" points="143.7,1050 143.7,1110" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="TicketList" data-to="TicketsInfo" data-type="association" data-marker-at="to" points="439.9666666666667,1626 439.9666666666667,1676 551.3166666666666,1676 551.3166666666666,1726" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainApp" data-to="MainController" data-type="association" data-marker-at="to" points="1711.9083333333333,1488 1711.9083333333333,1448 2614.207,1448 2614.207,478 715.3500000000001,478 715.3500000000001,448" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="MainApp" data-to="MainView" data-type="association" data-marker-at="to" points="1624.2333333333333,1596 1624.2333333333333,1726" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Launcher" data-to="MainApp" data-type="association" data-marker-at="to" points="1517.1333333333332,1418 1517.1333333333332,1428 1595.0083333333332,1428 1595.0083333333332,1488" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<g class="class-node" data-id="Application" data-label="Application" data-annotation="JavaFX">
+  <rect x="1635.2333333333333" y="1354" width="120" height="64" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1635.2333333333333" y="1354" width="120" height="48" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1695.2333333333333" y="1366" text-anchor="middle" dy="0.35em" font-size="10" font-weight="500" font-style="italic" fill="var(--_text-muted)">&lt;&lt;JavaFX&gt;&gt;</text>
+  <text x="1695.2333333333333" y="1384" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Application</text>
+  <line x1="1635.2333333333333" y1="1402" x2="1755.2333333333333" y2="1402" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="1635.2333333333333" y1="1410" x2="1755.2333333333333" y2="1410" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="StackPane" data-label="StackPane" data-annotation="JavaFX">
+  <rect x="336.1666666666667" y="1830" width="120" height="64" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="336.1666666666667" y="1830" width="120" height="48" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="396.1666666666667" y="1842" text-anchor="middle" dy="0.35em" font-size="10" font-weight="500" font-style="italic" fill="var(--_text-muted)">&lt;&lt;JavaFX&gt;&gt;</text>
+  <text x="396.1666666666667" y="1860" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">StackPane</text>
+  <line x1="336.1666666666667" y1="1878" x2="456.1666666666667" y2="1878" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="336.1666666666667" y1="1886" x2="456.1666666666667" y2="1886" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Launcher" data-label="Launcher">
+  <rect x="1420.0333333333333" y="1350" width="194.2" height="68" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1420.0333333333333" y="1350" width="194.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1517.1333333333332" y="1366" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Launcher</text>
+  <line x1="1420.0333333333333" y1="1382" x2="1614.2333333333333" y2="1382" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="1420.0333333333333" y1="1390" x2="1614.2333333333333" y2="1390" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1428.0333333333333" y="1404" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">main(String[] args)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+<g class="class-node" data-id="MainApp" data-label="MainApp">
+  <rect x="1507.3333333333333" y="1488" width="233.79999999999998" height="108" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1507.3333333333333" y="1488" width="233.79999999999998" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1624.2333333333333" y="1504" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">MainApp</text>
+  <line x1="1507.3333333333333" y1="1520" x2="1741.1333333333332" y2="1520" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1515.3333333333333" y="1534" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">controller</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">MainController</tspan></text>
+  <line x1="1507.3333333333333" y1="1548" x2="1741.1333333333332" y2="1548" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1515.3333333333333" y="1562" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">start(Stage primaryStage)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1515.3333333333333" y="1582" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">main(String[] args)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+<g class="class-node" data-id="MainController" data-label="MainController">
+  <rect x="465.75" y="40" width="332.8" height="408" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="465.75" y="40" width="332.8" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="632.15" y="56" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">MainController</text>
+  <line x1="465.75" y1="72" x2="798.55" y2="72" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="473.75" y="86" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">uiState</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UiState</tspan></text>
+  <text x="473.75" y="106" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">view</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">MainView</tspan></text>
+  <text x="473.75" y="126" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">primaryStage</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Stage</tspan></text>
+  <text x="473.75" y="146" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">trayUIManager</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">TrayUIManager</tspan></text>
+  <text x="473.75" y="166" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">monitor</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">TicketMonitor</tspan></text>
+  <text x="473.75" y="186" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">notificationService</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">SystemNotificationService</tspan></text>
+  <text x="473.75" y="206" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">historyTableManager</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">HistoryTableManager</tspan></text>
+  <text x="473.75" y="226" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">soundManager</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">SoundManager</tspan></text>
+  <text x="473.75" y="246" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">taskUIBridge</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">TaskUIBridge</tspan></text>
+  <line x1="465.75" y1="260" x2="798.55" y2="260" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="473.75" y="274" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">initialize()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="473.75" y="294" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">setupEventHandlers()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="473.75" y="314" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">exitApplication()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="473.75" y="334" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">handleStart()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="473.75" y="354" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">handleLoginConfirmed()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="473.75" y="374" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">handleStop()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="473.75" y="394" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">handleTestNotification()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="473.75" y="414" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">setUIState(UiState state)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="473.75" y="434" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">appendLog(String message)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+<g class="class-node" data-id="TaskUIBridge" data-label="TaskUIBridge">
+  <rect x="1773.2736666666665" y="558" width="431.8" height="188" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1773.2736666666665" y="558" width="431.8" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1989.1736666666666" y="574" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">TaskUIBridge</text>
+  <line x1="1773.2736666666665" y1="590" x2="2205.0736666666667" y2="590" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1781.2736666666665" y="604" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">taskStorageService</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">TaskStorageService</tspan></text>
+  <text x="1781.2736666666665" y="624" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">urlInput</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">TextField</tspan></text>
+  <text x="1781.2736666666665" y="644" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">areaInput</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">TextField</tspan></text>
+  <text x="1781.2736666666665" y="664" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">priceInput</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">TextField</tspan></text>
+  <line x1="1773.2736666666665" y1="678" x2="2205.0736666666667" y2="678" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1781.2736666666665" y="692" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">restoreLatestTask(Consumer~String~ onSoundPathRestored)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1781.2736666666665" y="712" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">parseAndRestoreRecord(String message)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1781.2736666666665" y="732" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">saveCurrentTask(String status, String soundPath)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+<g class="class-node" data-id="TicketWebCrawler" data-label="TicketWebCrawler" data-annotation="abstract">
+  <rect x="72.36666666666666" y="806" width="214" height="244" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="72.36666666666666" y="806" width="214" height="48" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="179.36666666666667" y="818" text-anchor="middle" dy="0.35em" font-size="10" font-weight="500" font-style="italic" fill="var(--_text-muted)">&lt;&lt;abstract&gt;&gt;</text>
+  <text x="179.36666666666667" y="836" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">TicketWebCrawler</text>
+  <line x1="72.36666666666666" y1="854" x2="286.3666666666667" y2="854" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="80.36666666666666" y="868" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">url</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="80.36666666666666" y="888" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">ws</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">WebSocketEndPoint</tspan></text>
+  <text x="80.36666666666666" y="908" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">browser</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Browser</tspan></text>
+  <text x="80.36666666666666" y="928" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">buyTicketPage</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Page</tspan></text>
+  <line x1="72.36666666666666" y1="942" x2="286.3666666666667" y2="942" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="80.36666666666666" y="956" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getBuyTicketPage()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Page</tspan></text>
+  <text x="80.36666666666666" y="976" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">startCrawler()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="80.36666666666666" y="996" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">startCrawler(int port)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="80.36666666666666" y="1016" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">refreshPage()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="80.36666666666666" y="1036" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">closeCrawler()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+<g class="class-node" data-id="KktixCrawler" data-label="KktixCrawler">
+  <rect x="287.4" y="1190" width="200.79999999999998" height="68" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="287.4" y="1190" width="200.79999999999998" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="387.79999999999995" y="1206" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">KktixCrawler</text>
+  <line x1="287.4" y1="1222" x2="488.19999999999993" y2="1222" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="287.4" y1="1230" x2="488.19999999999993" y2="1230" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="295.4" y="1244" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">crawlTickets()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">TicketList</tspan></text>
+</g>
+<g class="class-node" data-id="WebSocketEndPoint" data-label="WebSocketEndPoint">
+  <rect x="40" y="1110" width="207.4" height="148" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="40" y="1110" width="207.4" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="143.7" y="1126" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">WebSocketEndPoint</text>
+  <line x1="40" y1="1142" x2="247.4" y2="1142" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="48" y="1156" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">port</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">int</tspan></text>
+  <text x="48" y="1176" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">browserPath</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <line x1="40" y1="1190" x2="247.4" y2="1190" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="48" y="1204" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getPort()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">int</tspan></text>
+  <text x="48" y="1224" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">browserPathExist()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+  <text x="48" y="1244" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">startWebSocket()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+<g class="class-node" data-id="MonitorEvent" data-label="MonitorEvent">
+  <rect x="343.58333333333337" y="598" width="299.8" height="128" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="343.58333333333337" y="598" width="299.8" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="493.48333333333335" y="614" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">MonitorEvent</text>
+  <line x1="343.58333333333337" y1="630" x2="643.3833333333334" y2="630" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="351.58333333333337" y="644" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">message</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="351.58333333333337" y="664" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">ticketFound</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+  <line x1="343.58333333333337" y1="678" x2="643.3833333333334" y2="678" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="351.58333333333337" y="692" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">log(String message)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">MonitorEvent</tspan></text>
+  <text x="351.58333333333337" y="712" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">ticketFound(String message)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">MonitorEvent</tspan></text>
+</g>
+<g class="class-node" data-id="DatabaseManager" data-label="DatabaseManager">
+  <rect x="1471.0333333333333" y="838" width="306.4" height="148" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1471.0333333333333" y="838" width="306.4" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1624.2333333333333" y="854" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">DatabaseManager</text>
+  <line x1="1471.0333333333333" y1="870" x2="1777.4333333333334" y2="870" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1479.0333333333333" y="884" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">DB_URL</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <line x1="1471.0333333333333" y1="898" x2="1777.4333333333334" y2="898" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1479.0333333333333" y="912" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">initializeDatabase()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1479.0333333333333" y="932" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">saveLog(String message)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1479.0333333333333" y="952" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getRecentHistory()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="1479.0333333333333" y="972" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getMonitoringHistory()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">List~HistoryEntry~</tspan></text>
+</g>
+<g class="class-node" data-id="SoundManager" data-label="SoundManager">
+  <rect x="924.2666666666667" y="1110" width="339.4" height="308" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="924.2666666666667" y="1110" width="339.4" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1093.9666666666667" y="1126" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">SoundManager</text>
+  <line x1="924.2666666666667" y1="1142" x2="1263.6666666666665" y2="1142" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="932.2666666666667" y="1156" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">DEFAULT_LABEL</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="932.2666666666667" y="1176" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">CUSTOM_LABEL</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="932.2666666666667" y="1196" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">customSoundPath</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="932.2666666666667" y="1216" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">previewPlayer</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">SoundPlayer</tspan></text>
+  <line x1="924.2666666666667" y1="1230" x2="1263.6666666666665" y2="1230" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="932.2666666666667" y="1244" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">openSoundsFolder()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="932.2666666666667" y="1264" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">handleCustomSelection()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+  <text x="932.2666666666667" y="1284" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">chooseSpecificCustomSound(Stage stage)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+  <text x="932.2666666666667" y="1304" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">selectDefault()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="932.2666666666667" y="1324" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">resolveSelectedSoundPath()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="932.2666666666667" y="1344" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">restoreSoundPath(String savedPath)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+  <text x="932.2666666666667" y="1364" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">previewSound()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="932.2666666666667" y="1384" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">stopPreview()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="932.2666666666667" y="1404" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">stopAllSounds()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+<g class="class-node" data-id="SoundPlayer" data-label="SoundPlayer">
+  <rect x="1537.9666666666667" y="1954" width="385.59999999999997" height="168" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1537.9666666666667" y="1954" width="385.59999999999997" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1730.7666666666667" y="1970" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">SoundPlayer</text>
+  <line x1="1537.9666666666667" y1="1986" x2="1923.5666666666666" y2="1986" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1545.9666666666667" y="2000" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">currentClip</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">AtomicReference~Clip~</tspan></text>
+  <text x="1545.9666666666667" y="2020" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">currentMedia</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">AtomicReference~MediaPlayer~</tspan></text>
+  <line x1="1537.9666666666667" y1="2034" x2="1923.5666666666666" y2="2034" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1545.9666666666667" y="2048" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">playAsync(String path, Consumer~String~ onError)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1545.9666666666667" y="2068" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">playDefaultAsync(Consumer~String~ onError)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1545.9666666666667" y="2088" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">stopAll()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1545.9666666666667" y="2108" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">isPlaying()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+</g>
+<g class="class-node" data-id="SystemNotificationService" data-label="SystemNotificationService">
+  <rect x="2636.207" y="1478" width="431.8" height="188" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="2636.207" y="1478" width="431.8" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="2852.107" y="1494" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">SystemNotificationService</text>
+  <line x1="2636.207" y1="1510" x2="3068.007" y2="1510" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2644.207" y="1524" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">soundPlayer</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">SoundPlayer</tspan></text>
+  <text x="2644.207" y="1544" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">soundPath</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <line x1="2636.207" y1="1558" x2="3068.007" y2="1558" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2644.207" y="1572" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">setSoundPath(String path)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="2644.207" y="1592" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getSoundPath()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="2644.207" y="1612" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">notifyTicketAvailable(String ticketUrl, String details)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="2644.207" y="1632" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">stopNotifySound()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="2644.207" y="1652" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">isNotifySoundPlaying()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+</g>
+<g class="class-node" data-id="TaskStorageService" data-label="TaskStorageService">
+  <rect x="1928.2069999999999" y="806" width="676" height="128" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1928.2069999999999" y="806" width="676" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="2266.207" y="822" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">TaskStorageService</text>
+  <line x1="1928.2069999999999" y1="838" x2="2604.207" y2="838" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1936.2069999999999" y="852" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">storagePath</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Path</tspan></text>
+  <line x1="1928.2069999999999" y1="866" x2="2604.207" y2="866" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1936.2069999999999" y="880" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">loadLatestTask()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Optional~StoredTask~</tspan></text>
+  <text x="1936.2069999999999" y="900" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">upsertTask(StoredTask task)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1936.2069999999999" y="920" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">fromInputs(String url, String area, String price, String lastStatus, String soundPath)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">StoredTask</tspan></text>
+</g>
+<g class="class-node" data-id="TicketMonitor" data-label="TicketMonitor">
+  <rect x="332.26666666666665" y="815.1428571428571" width="445" height="228" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="332.26666666666665" y="815.1428571428571" width="445" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="554.7666666666667" y="831.1428571428571" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">TicketMonitor</text>
+  <line x1="332.26666666666665" y1="847.1428571428571" x2="777.2666666666667" y2="847.1428571428571" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="340.26666666666665" y="861.1428571428571" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">KKTIX_HOME</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="340.26666666666665" y="881.1428571428571" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">keyword</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="340.26666666666665" y="901.1428571428571" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">timer</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Timer</tspan></text>
+  <text x="340.26666666666665" y="921.1428571428571" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">crawler</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">KktixCrawler</tspan></text>
+  <line x1="332.26666666666665" y1="935.1428571428571" x2="777.2666666666667" y2="935.1428571428571" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="340.26666666666665" y="949.1428571428571" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">prepareMonitoring(Runnable onReady)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="340.26666666666665" y="969.1428571428571" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">beginMonitoring(int intervalSeconds)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="340.26666666666665" y="989.1428571428571" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">stopMonitoring()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="340.26666666666665" y="1009.1428571428571" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">scheduleNextCrawl(TicketMatcher matcher, int baseSeconds)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="340.26666666666665" y="1029.142857142857" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">crawlAndCheck(TicketMatcher matcher)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+<g class="class-node" data-id="TicketList" data-label="TicketList">
+  <rect x="283.4666666666667" y="1498" width="313" height="128" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="283.4666666666667" y="1498" width="313" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="439.9666666666667" y="1514" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">TicketList</text>
+  <line x1="283.4666666666667" y1="1530" x2="596.4666666666667" y2="1530" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="291.4666666666667" y="1544" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">ticketsInfo</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">List~TicketsInfo~</tspan></text>
+  <line x1="283.4666666666667" y1="1558" x2="596.4666666666667" y2="1558" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="291.4666666666667" y="1572" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">setTickets(List~Locator~ ticketUnits)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="291.4666666666667" y="1592" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">haveTicket()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+  <text x="291.4666666666667" y="1612" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getTicketsInfo()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">List~TicketsInfo~</tspan></text>
+</g>
+<g class="class-node" data-id="TicketsInfo" data-label="TicketsInfo">
+  <rect x="496.1666666666667" y="1726" width="220.6" height="168" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="496.1666666666667" y="1726" width="220.6" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="606.4666666666667" y="1742" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">TicketsInfo</text>
+  <line x1="496.1666666666667" y1="1758" x2="716.7666666666667" y2="1758" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="504.1666666666667" y="1772" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">ticketType</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="504.1666666666667" y="1792" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">ticketPrice</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="504.1666666666667" y="1812" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">ticketStatus</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">StatusType</tspan></text>
+  <line x1="496.1666666666667" y1="1826" x2="716.7666666666667" y2="1826" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="504.1666666666667" y="1840" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getTicketType()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="504.1666666666667" y="1860" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getTicketPrice()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="504.1666666666667" y="1880" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getTicketStatus()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">StatusType</tspan></text>
+</g>
+<g class="class-node" data-id="NotificationTestHelper" data-label="NotificationTestHelper">
+  <rect x="1104.9666666666667" y="558" width="458.2" height="108" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1104.9666666666667" y="558" width="458.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1334.0666666666666" y="574" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">NotificationTestHelper</text>
+  <line x1="1104.9666666666667" y1="590" x2="1563.1666666666667" y2="590" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1112.9666666666667" y="604" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">DEFAULT_URL</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="1112.9666666666667" y="624" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">DEFAULT_PRICE</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <line x1="1104.9666666666667" y1="638" x2="1563.1666666666667" y2="638" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1112.9666666666667" y="652" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">build(String url, String area, String price)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">NotificationPayload</tspan></text>
+</g>
+<g class="class-node" data-id="TicketMatcher" data-label="TicketMatcher">
+  <rect x="617.4666666666667" y="1216.6666666666667" width="266.79999999999995" height="148" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="617.4666666666667" y="1216.6666666666667" width="266.79999999999995" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="750.8666666666667" y="1232.6666666666667" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">TicketMatcher</text>
+  <line x1="617.4666666666667" y1="1248.6666666666667" x2="884.2666666666667" y2="1248.6666666666667" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="625.4666666666667" y="1262.6666666666667" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">area</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="625.4666666666667" y="1282.6666666666667" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">price</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <line x1="617.4666666666667" y1="1296.6666666666667" x2="884.2666666666667" y2="1296.6666666666667" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="625.4666666666667" y="1310.6666666666667" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">matches(TicketsInfo ticket)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+  <text x="625.4666666666667" y="1330.6666666666667" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getArea()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="625.4666666666667" y="1350.6666666666667" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getPrice()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+</g>
+<g class="class-node" data-id="HistoryTableManager" data-label="HistoryTableManager">
+  <rect x="1584.1666666666665" y="628" width="149.10699999999997" height="48" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1584.1666666666665" y="628" width="149.10699999999997" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1658.7201666666665" y="644" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">HistoryTableManager</text>
+  <line x1="1584.1666666666665" y1="660" x2="1733.2736666666665" y2="660" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="1584.1666666666665" y1="668" x2="1733.2736666666665" y2="668" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="MainView" data-label="MainView">
+  <rect x="1517.7" y="1726" width="319.59999999999997" height="168" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1517.7" y="1726" width="319.59999999999997" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1677.5" y="1742" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">MainView</text>
+  <line x1="1517.7" y1="1758" x2="1837.3" y2="1758" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1525.7" y="1772" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">root</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">VBox</tspan></text>
+  <text x="1525.7" y="1792" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">urlInput</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">TextField</tspan></text>
+  <text x="1525.7" y="1812" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">startBtn</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Button</tspan></text>
+  <text x="1525.7" y="1832" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">soundToggle</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">SoundToggleSwitch</tspan></text>
+  <line x1="1517.7" y1="1846" x2="1837.3" y2="1846" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1525.7" y="1860" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">addHistorySection(VBox historySection)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="1525.7" y="1880" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">getRoot()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">VBox</tspan></text>
+</g>
+<g class="class-node" data-id="SoundToggleSwitch" data-label="SoundToggleSwitch">
+  <rect x="855.9166666666666" y="1954" width="306.4" height="148" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="855.9166666666666" y="1954" width="306.4" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1009.1166666666666" y="1970" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">SoundToggleSwitch</text>
+  <line x1="855.9166666666666" y1="1986" x2="1162.3166666666666" y2="1986" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="863.9166666666666" y="2000" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">customSelected</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+  <line x1="855.9166666666666" y1="2014" x2="1162.3166666666666" y2="2014" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="863.9166666666666" y="2028" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">setOnToggleClicked(Runnable handler)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="863.9166666666666" y="2048" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">setOnRightClicked(Runnable handler)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="863.9166666666666" y="2068" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">isCustomSelected()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">boolean</tspan></text>
+  <text x="863.9166666666666" y="2088" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">setCustom(boolean isCustom)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+<g class="class-node" data-id="TrayUIManager" data-label="TrayUIManager">
+  <rect x="2245.0736666666667" y="558" width="260.2" height="148" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="2245.0736666666667" y="558" width="260.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="2375.1736666666666" y="574" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">TrayUIManager</text>
+  <line x1="2245.0736666666667" y1="590" x2="2505.2736666666665" y2="590" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2253.0736666666667" y="604" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">primaryStage</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Stage</tspan></text>
+  <text x="2253.0736666666667" y="624" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">- </tspan><tspan fill="var(--_text-sec)">monitorLogStage</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Stage</tspan></text>
+  <line x1="2245.0736666666667" y1="638" x2="2505.2736666666665" y2="638" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2253.0736666666667" y="652" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">clearLog()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="2253.0736666666667" y="672" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">appendLog(String message)</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+  <text x="2253.0736666666667" y="692" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">showFloatingLogIfNotShowing()</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">void</tspan></text>
+</g>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</svg>
