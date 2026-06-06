@@ -1,4 +1,4 @@
-package app.crawler;
+package app.crawler.websocket;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,14 +55,32 @@ public class WebSocketEndPoint {
     public boolean browserPathExist(){ return this.haveBrowserPath; }
 
     public void startWebSocket() throws RuntimeException{
+        File tempDir;
+
         if(haveBrowserPath){
             ProcessBuilder pb;
             if(os.contains("mac")){
+                tempDir = new File("/tmp/chrome_debug");
+                if(!tempDir.exists()){
+                    System.out.println("tempDir doesn't exist.");
+                    try{
+                        Process warmupProcess = new ProcessBuilder(this.browserPath,
+                                "--remote-debugging-port="+this.port,
+                                "--user-data-dir=/tmp/chrome_debug").start();
+                        Thread.sleep(2500);
+
+                        warmupProcess.destroy();
+                        Thread.sleep(500);
+                    }catch(IOException | InterruptedException e){
+                        System.out.println("solution failed.");
+                    }
+                }
+
                 pb = new ProcessBuilder(this.browserPath,
                         "--remote-debugging-port="+this.port,
-                        "--user-data-dir=/tmp/chrome_debug");
-                        // "--no-first-run",
-                        // "--no-default-browser-check");
+                        "--user-data-dir=/tmp/chrome_debug",
+                        "--no-first-run",
+                        "--no-default-browser-check");
                 try{
                     pb.start();
                 } catch (IOException e) {

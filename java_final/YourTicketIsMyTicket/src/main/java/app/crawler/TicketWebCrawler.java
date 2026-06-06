@@ -1,5 +1,6 @@
 package app.crawler;
 
+import app.crawler.websocket.WebSocketEndPoint;
 import com.microsoft.playwright.*;
 
 public abstract class TicketWebCrawler {

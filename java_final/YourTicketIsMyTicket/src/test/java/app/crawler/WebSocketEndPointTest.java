@@ -1,5 +1,7 @@
 package app.crawler;
 
+import app.crawler.websocket.WebSocketEndPoint;
+
 public class WebSocketEndPointTest{
     public static void main(String[] args){
         WebSocketEndPoint webSocketEndPoint = new WebSocketEndPoint();
