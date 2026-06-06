@@ -140,4 +140,18 @@ public class DatabaseManager {
             System.err.println("清除歷史紀錄失敗: " + e.getMessage());
         }
     }
+
+    /**
+     * 6. 刪除指定的歷史紀錄
+     */
+    public static void deleteHistoryEntry(int id) {
+        String sql = "DELETE FROM history WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("刪除單筆紀錄失敗: " + e.getMessage());
+        }
+    }
 }

@@ -33,14 +33,24 @@ public class HistoryTableManager {
         Label historyLabel = new Label("歷史監控紀錄");
         historyLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;");
 
-        Button deleteButton = new Button("刪除歷史紀錄");
-        deleteButton.setStyle("-fx-font-size: 12px; -fx-text-fill: #888888; -fx-background-color: transparent; -fx-border-color: #888888; -fx-border-radius: 3px; -fx-padding: 3 8;");
-        deleteButton.setOnAction(e -> {
+        Button deleteSelectedButton = new Button("刪除選取紀錄");
+        deleteSelectedButton.setStyle("-fx-font-size: 12px; -fx-text-fill: #888888; -fx-background-color: transparent; -fx-border-color: #888888; -fx-border-radius: 3px; -fx-padding: 3 8;");
+        deleteSelectedButton.setOnAction(e -> {
+            DatabaseManager.HistoryEntry selected = historyTableView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                DatabaseManager.deleteHistoryEntry(selected.id);
+                refreshHistoryList();
+            }
+        });
+
+        Button deleteAllButton = new Button("刪除全部");
+        deleteAllButton.setStyle("-fx-font-size: 12px; -fx-text-fill: #d9534f; -fx-background-color: transparent; -fx-border-color: #d9534f; -fx-border-radius: 3px; -fx-padding: 3 8;");
+        deleteAllButton.setOnAction(e -> {
             DatabaseManager.clearHistory();
             refreshHistoryList();
         });
 
-        HBox headerBox = new HBox(10, historyLabel, deleteButton);
+        HBox headerBox = new HBox(10, historyLabel, deleteSelectedButton, deleteAllButton);
         headerBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
         historyTableView.setPrefHeight(210);
