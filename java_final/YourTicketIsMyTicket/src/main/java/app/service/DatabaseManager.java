@@ -127,4 +127,17 @@ public class DatabaseManager {
 
         return entries;
     }
+
+    /**
+     * 5. 清除所有歷史紀錄
+     */
+    public static void clearHistory() {
+        String sql = "DELETE FROM history";
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.err.println("清除歷史紀錄失敗: " + e.getMessage());
+        }
+    }
 }

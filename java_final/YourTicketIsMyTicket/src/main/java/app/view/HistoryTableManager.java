@@ -6,7 +6,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,6 +32,16 @@ public class HistoryTableManager {
     private VBox createHistorySection() {
         Label historyLabel = new Label("歷史監控紀錄");
         historyLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;");
+
+        Button deleteButton = new Button("刪除歷史紀錄");
+        deleteButton.setStyle("-fx-font-size: 12px; -fx-text-fill: #888888; -fx-background-color: transparent; -fx-border-color: #888888; -fx-border-radius: 3px; -fx-padding: 3 8;");
+        deleteButton.setOnAction(e -> {
+            DatabaseManager.clearHistory();
+            refreshHistoryList();
+        });
+
+        HBox headerBox = new HBox(10, historyLabel, deleteButton);
+        headerBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
         historyTableView.setPrefHeight(210);
         historyTableView.setPlaceholder(new Label("目前尚無監控條件紀錄"));
@@ -70,7 +82,7 @@ public class HistoryTableManager {
             }
         });
 
-        return new VBox(8, historyLabel, historyTableView);
+        return new VBox(8, headerBox, historyTableView);
     }
 
     public VBox getView() {
