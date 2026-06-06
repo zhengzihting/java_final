@@ -9,26 +9,15 @@ import java.util.regex.Pattern;
 
 public class TicketList {
     private List<TicketsInfo> ticketsInfo = new ArrayList<>();
-    private final Pattern pricePattern = Pattern.compile("\\d+");
 
     public void setTickets(List<Locator> ticketUnits) throws NullPointerException{
-        Matcher m;
-        String ticketType, ticketPriceStr, getPriceNumber;
-        int ticketPrice;
+        String ticketType, ticketPrice;
         Locator statusContent;
         TicketsInfo.StatusType ticketStatus;
 
         for(Locator ticketUnit: ticketUnits){
             ticketType = ticketUnit.locator("span.ticket-name").innerText();
-
-            ticketPriceStr = ticketUnit.locator("span.ticket-price").innerText();
-            m = pricePattern.matcher(ticketPriceStr);
-            ticketPrice = 0;
-            for(int d = 0; m.find(); d++){
-                getPriceNumber = ticketPriceStr.substring(m.start(), m.end());
-               ticketPrice = (int)(ticketPrice*Math.pow(1000, d)) + Integer.parseInt(getPriceNumber);
-            }
-
+            ticketPrice = ticketUnit.locator("span.ticket-price").innerText();
             statusContent = ticketUnit.locator("span.ticket-quantity");
             if(statusContent.getByRole(AriaRole.BUTTON).first().isVisible() || statusContent.getByText("需要資格").isVisible()){
                 ticketStatus = TicketsInfo.StatusType.SELLING;

@@ -226,7 +226,7 @@ public class TicketMonitor {
 
             for (TicketsInfo ticket : tickets) {
                 final String type   = ticket.getTicketType();
-                final int    price  = ticket.getTicketPrice();
+                final String price  = ticket.getTicketPrice();
                 final TicketsInfo.StatusType status = ticket.getTicketStatus();
 
                 if (matcher.matches(ticket)) {
