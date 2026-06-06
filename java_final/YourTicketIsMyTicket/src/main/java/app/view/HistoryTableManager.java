@@ -53,7 +53,10 @@ public class HistoryTableManager {
         colTime.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().timestamp));
         colTime.setPrefWidth(140);
 
-        historyTableView.getColumns().addAll(colArea, colPrice, colTime, colUrl);
+        historyTableView.getColumns().add(colArea);
+        historyTableView.getColumns().add(colPrice);
+        historyTableView.getColumns().add(colTime);
+        historyTableView.getColumns().add(colUrl);
 
         historyTableView.setPrefWidth(550);
         historyTableView.setMaxWidth(550);

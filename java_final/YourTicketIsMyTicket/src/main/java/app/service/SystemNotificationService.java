@@ -23,8 +23,18 @@ public class SystemNotificationService {
     /** 通知 icon，從 resources 載入，失敗時為 null */
     private static final Image NOTIFY_ICON = loadIcon();
 
+    private boolean popupEnabled = true;
+
     public SystemNotificationService(Consumer<String> logger) {
         this.logger = logger;
+    }
+
+    public void setPopupEnabled(boolean enabled) {
+        this.popupEnabled = enabled;
+    }
+
+    public boolean isPopupEnabled() {
+        return popupEnabled;
     }
 
     // ── 音效設定 ──────────────────────────────────────────────────────────────
@@ -50,29 +60,33 @@ public class SystemNotificationService {
         // 1. 播放音效（非同步，不阻塞 UI；空字串 → OS 預設音效）
         soundPlayer.playAsync(soundPath, this::log);
 
-        // 2. 顯示視覺通知（dorkbox Notify）
-        try {
+        // 2. 顯示視覺通知（dorkbox Notify），如果開啟彈出式通知
+        if (popupEnabled) {
+            try {
 
-            var builder = Notify.Companion.create()
-                    .title("YourTicketIsMyTicket")
-                    .text("偵測到符合條件的釋票，點擊通知開啟購票頁面。")
-                    .hideAfter(12000)
-                    .position(Position.TOP_RIGHT)
-                    .onClickAction(notification -> {
-                        openTicketUrl(ticketUrl);
-                        notification.close();
-                        return Unit.INSTANCE;
-                    });
+                var builder = Notify.Companion.create()
+                        .title("YourTicketIsMyTicket")
+                        .text("偵測到符合條件的釋票，點擊通知開啟購票頁面。")
+                        .hideAfter(12000)
+                        .position(Position.TOP_RIGHT)
+                        .onClickAction(notification -> {
+                            openTicketUrl(ticketUrl);
+                            notification.close();
+                            return Unit.INSTANCE;
+                        });
 
-            if (NOTIFY_ICON != null) {
-                // ⚠️ 不能用 showInformation()，那會覆蓋掉我們的 image！
-                builder.image(NOTIFY_ICON).show();
-            } else {
-                builder.showInformation();
+                if (NOTIFY_ICON != null) {
+                    // ⚠️ 不能用 showInformation()，那會覆蓋掉我們的 image！
+                    builder.image(NOTIFY_ICON).show();
+                } else {
+                    builder.showInformation();
+                }
+                log("已發送系統通知。詳細資訊：" + details);
+            } catch (Exception e) {
+                log("系統通知發送失敗：" + e.getMessage());
             }
-            log("已發送系統通知。詳細資訊：" + details);
-        } catch (Exception e) {
-            log("系統通知發送失敗：" + e.getMessage());
+        } else {
+            log("偵測到釋票，但彈出式通知已關閉。詳細資訊：" + details);
         }
     }
 

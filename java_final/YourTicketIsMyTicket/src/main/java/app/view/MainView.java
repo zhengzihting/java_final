@@ -22,7 +22,7 @@ public class MainView {
     private final Button startBtn;
     private final Button stopBtn;
     private final Button muteAllBtn;
-    private final Button testNotifyBtn;
+    private final Button notifyToggleBtn;
     private final Button previewSoundBtn;
 
     private final SoundToggleSwitch soundToggle;
@@ -76,15 +76,15 @@ public class MainView {
         // --- 按鈕區域 ---
         startBtn = new Button("開啟瀏覽器");
         stopBtn = new Button("停止");
-        testNotifyBtn = new Button("測試通知");
+        notifyToggleBtn = new Button("彈出式通知");
 
         String btnStyle = "-fx-font-size: 14px; -fx-padding: 8 15;";
         startBtn.setStyle(btnStyle + "-fx-background-color: #d4edda; -fx-border-color: #28a745;");
         stopBtn.setStyle(btnStyle + "-fx-background-color: #f8d7da; -fx-border-color: #dc3545;");
-        testNotifyBtn.setStyle(btnStyle + "-fx-background-color: #fff3cd; -fx-border-color: #ffc107;");
+        notifyToggleBtn.setStyle(btnStyle + "-fx-background-color: #fff3cd; -fx-border-color: #ffc107;");
         stopBtn.setDisable(true);
 
-        HBox buttonBar = new HBox(15, startBtn, stopBtn, testNotifyBtn);
+        HBox buttonBar = new HBox(15, startBtn, stopBtn, notifyToggleBtn);
         buttonBar.setAlignment(Pos.CENTER);
 
         // --- 佈局設定 ---
@@ -114,7 +114,7 @@ public class MainView {
     public Button getStartBtn() { return startBtn; }
     public Button getStopBtn() { return stopBtn; }
     public Button getMuteAllBtn() { return muteAllBtn; }
-    public Button getTestNotifyBtn() { return testNotifyBtn; }
+    public Button getNotifyToggleBtn() { return notifyToggleBtn; }
     public Button getPreviewSoundBtn() { return previewSoundBtn; }
 
     public SoundToggleSwitch getSoundToggle() { return soundToggle; }

@@ -13,6 +13,8 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 public class MainController {
 
@@ -28,6 +30,8 @@ public class MainController {
     private HistoryTableManager historyTableManager;
     private SoundManager soundManager;
     private TaskUIBridge taskUIBridge;
+    
+    private PauseTransition notifyBtnPause;
 
     public MainController(MainView view, Stage primaryStage) {
         this.view = view;
@@ -87,7 +91,7 @@ public class MainController {
 
         view.getPreviewSoundBtn().setOnAction(e -> soundManager.previewSound());
         view.getMuteAllBtn().setOnAction(e -> soundManager.stopAllSounds());
-        view.getTestNotifyBtn().setOnAction(e -> handleTestNotification());
+        view.getNotifyToggleBtn().setOnAction(e -> handleNotifyToggle());
 
         // UI 狀態綁定 startBtn / stopBtn 在 setUIState 處理
     }
@@ -164,6 +168,24 @@ public class MainController {
         taskUIBridge.saveCurrentTask("STOPPED", soundManager.resolveSelectedSoundPath());
         setUIState(UiState.IDLE);
         historyTableManager.refreshHistoryList();
+    }
+
+    private void handleNotifyToggle() {
+        boolean isEnabled = !notificationService.isPopupEnabled();
+        notificationService.setPopupEnabled(isEnabled);
+        if (isEnabled) {
+            view.getNotifyToggleBtn().setText("通知已開啟");
+            handleTestNotification();
+        } else {
+            view.getNotifyToggleBtn().setText("通知已關閉");
+        }
+        
+        if (notifyBtnPause != null) {
+            notifyBtnPause.stop();
+        }
+        notifyBtnPause = new PauseTransition(Duration.seconds(2));
+        notifyBtnPause.setOnFinished(e -> view.getNotifyToggleBtn().setText("彈出式通知"));
+        notifyBtnPause.play();
     }
 
     private void handleTestNotification() {
