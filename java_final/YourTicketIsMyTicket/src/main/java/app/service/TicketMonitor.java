@@ -297,10 +297,10 @@ public class TicketMonitor {
             return false;
         }
 
-        if (matcher.getPrice() > 0 && ticket.getTicketPrice() != matcher.getPrice()) {
+        String crawlerPrice = ticket.getTicketPrice() != null ? ticket.getTicketPrice().replaceAll("[^0-9.]", "") : "";
+        if (!matcher.getPrice().isEmpty() && !matcher.getPrice().equals(crawlerPrice)){
             return false;
         }
-
         return true;
     }
 }

@@ -10,14 +10,14 @@ import app.ticketData.TicketsInfo;
 public class TicketMatcher {
 
     private final String area;   // 空字串代表不限區域
-    private final int price;     // 0 代表不限票價
+    private final String price;  // 空字串代表不限票價
 
     /**
      * @param keyword MainApp 組出的條件字串，格式為 "區域 票價"
      */
     public TicketMatcher(String keyword) {
         String parsedArea  = "";
-        int    parsedPrice = 0;
+        String parsedPrice = "";
 
         if (keyword != null && !keyword.isBlank()) {
             String trimmed = keyword.trim();
@@ -28,7 +28,7 @@ public class TicketMatcher {
                 String areaPart  = trimmed.substring(0, lastSpaceIdx);
                 
                 if (pricePart.matches("\\d+")) {
-                    parsedPrice = Integer.parseInt(pricePart);
+                    parsedPrice = pricePart;
                     parsedArea  = areaPart.trim();
                 } else {
                     parsedArea  = trimmed;
@@ -36,7 +36,7 @@ public class TicketMatcher {
             } else {
                 // 如果中間完全沒有空格
                 if (trimmed.matches("\\d+")) {
-                    parsedPrice = Integer.parseInt(trimmed);
+                    parsedPrice = trimmed;
                 } else {
                     parsedArea  = trimmed;
                 }
@@ -66,11 +66,8 @@ public class TicketMatcher {
         }
 
         // 3. 票價比對（有設條件才比）
-        if (price > 0 && ticket.getTicketPrice() != price) {
-            return false;
-        }
-
-        return true;
+        String crawlerPrice = ticket.getTicketPrice() != null ? ticket.getTicketPrice().replaceAll("[^0-9.]", "") : "";
+        return price.isEmpty() || price.equals(crawlerPrice);
     }
 
     // -------------------------------------------------------------------------
@@ -78,10 +75,10 @@ public class TicketMatcher {
     // -------------------------------------------------------------------------
 
     public String getArea()  { return area;  }
-    public int    getPrice() { return price; }
+    public String getPrice() { return price; }
 
     @Override
     public String toString() {
-        return String.format("TicketMatcher{area='%s', price=%d}", area, price);
+        return String.format("TicketMatcher{area='%s', price='%s'}", area, price);
     }
 }
