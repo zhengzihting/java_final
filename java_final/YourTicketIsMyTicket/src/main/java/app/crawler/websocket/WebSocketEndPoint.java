@@ -60,30 +60,16 @@ public class WebSocketEndPoint {
         if(haveBrowserPath){
             ProcessBuilder pb;
             if(os.contains("mac")){
-                tempDir = new File("/tmp/chrome_debug");
-                if(!tempDir.exists()){
-                    System.out.println("tempDir doesn't exist.");
-                    try{
-                        Process warmupProcess = new ProcessBuilder(this.browserPath,
-                                "--remote-debugging-port="+this.port,
-                                "--user-data-dir=/tmp/chrome_debug").start();
-                        Thread.sleep(2500);
-
-                        warmupProcess.destroy();
-                        Thread.sleep(500);
-                    }catch(IOException | InterruptedException e){
-                        System.out.println("solution failed.");
-                    }
-                }
-
                 pb = new ProcessBuilder(this.browserPath,
                         "--remote-debugging-port="+this.port,
                         "--user-data-dir=/tmp/chrome_debug",
-                        "--no-first-run",
-                        "--no-default-browser-check");
+                        "--no-first-run",                  // 跳過首次運行歡迎畫面
+                        "--no-default-browser-check",      // 跳過預設瀏覽器檢查
+                        "--use-mock-keychain");
                 try{
                     pb.start();
-                } catch (IOException e) {
+                    Thread.sleep(2000);
+                } catch (IOException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }else if(os.contains("win")){
