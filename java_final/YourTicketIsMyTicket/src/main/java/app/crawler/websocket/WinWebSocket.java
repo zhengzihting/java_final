@@ -3,37 +3,45 @@ package app.crawler.websocket;
 import java.io.File;
 import java.io.IOException;
 
-public class MacWebSocket implements WebSocketEndPoint {
+public class WinWebSocket implements WebSocketEndPoint{
     private int port;
     private String browserPath;
     private boolean haveBrowserPath = false;
 
-    public MacWebSocket(){
+    public WinWebSocket(){
         this.port = WebSocketEndPoint.port;
         defaultPath();
     }
 
-    public MacWebSocket(int port){
+    public WinWebSocket(int port){
         this.port = port;
         defaultPath();
     }
 
-    public MacWebSocket(String browserPath){
+    public WinWebSocket(String browserPath){
         this.port = WebSocketEndPoint.port;
         this.browserPath = browserPath;
         haveBrowserPath = new File(this.browserPath).exists();
     }
 
-    public MacWebSocket(int port, String browserPath){
+    public WinWebSocket(int port, String browserPath){
         this.port = port;
         this.browserPath = browserPath;
         haveBrowserPath = new File(this.browserPath).exists();
     }
 
     public void defaultPath(){
-        String macPath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-        this.browserPath = macPath;
-        haveBrowserPath = new File(this.browserPath).exists();
+        String[] winPaths = {"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+                "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+                System.getProperty("user.home") + "\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"};
+
+        for(String path : winPaths){
+            this.browserPath = path;
+            if(new File(this.browserPath).exists()){
+                haveBrowserPath = true;
+                break;
+            }
+        }
     }
 
     public int getPort(){ return this.port; }
@@ -45,14 +53,12 @@ public class MacWebSocket implements WebSocketEndPoint {
             ProcessBuilder pb;
             pb = new ProcessBuilder(this.browserPath,
                     "--remote-debugging-port="+this.port,
-                    "--user-data-dir=/tmp/chrome_debug",
-                    "--no-first-run",                  // 跳過首次運行歡迎畫面
-                    "--no-default-browser-check",      // 跳過預設瀏覽器檢查
-                    "--use-mock-keychain");
+                    "--user-data-dir=C:\\ChromeProfile",
+                    "--no-first-run",
+                    "--no-default-browser-check");
             try{
                 pb.start();
-                Thread.sleep(2000);
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
