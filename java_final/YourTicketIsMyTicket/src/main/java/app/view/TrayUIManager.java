@@ -261,7 +261,8 @@ public class TrayUIManager {
                                 hiddenDialog.setLocation(mouseLoc.x, mouseLoc.y);
                                 hiddenDialog.setVisible(true);
                                 // JPopupMenu 會自動處理超出螢幕邊界
-                                popup.show(hiddenDialog, 0, 0);
+                                int yOffset = -popup.getPreferredSize().height;
+                                popup.show(hiddenDialog, 0, yOffset);
                             });
                         }
                     }
