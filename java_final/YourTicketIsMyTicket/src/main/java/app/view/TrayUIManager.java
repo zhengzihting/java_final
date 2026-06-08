@@ -1,4 +1,12 @@
 package app.view;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
+
 import javafx.animation.FadeTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -15,13 +23,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
-import javax.imageio.ImageIO;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.InputStream;
 
 public class TrayUIManager {
 
@@ -181,25 +182,34 @@ public class TrayUIManager {
             TrayIcon trayIcon = new TrayIcon(image, "Ticket Monitor");
             trayIcon.setImageAutoSize(true);
 
+            // 解決 Windows 上 AWT PopupMenu 中文顯示亂碼問題：
+            // 明確指定支援中文的字型，依序嘗試 Microsoft JhengHei (Win)、PingFang TC (Mac)、Dialog (通用 fallback)
+            java.awt.Font chineseFont = resolveCjkFont(14);
+
             java.awt.PopupMenu popup = new java.awt.PopupMenu();
+            popup.setFont(chineseFont);
             
             java.awt.MenuItem logItem = new java.awt.MenuItem("顯示監控日誌");
+            logItem.setFont(chineseFont);
             logItem.addActionListener(e -> Platform.runLater(() -> {
                 if (!monitorLogStage.isShowing()) toggleFloatingLogWindow();
                 else monitorLogStage.toFront();
             }));
             
             java.awt.MenuItem mainItem = new java.awt.MenuItem("顯示主視窗");
+            mainItem.setFont(chineseFont);
             mainItem.addActionListener(e -> Platform.runLater(() -> {
                 showMainAction.run();
             }));
 
             java.awt.MenuItem stopItem = new java.awt.MenuItem("停止監控");
+            stopItem.setFont(chineseFont);
             stopItem.addActionListener(e -> Platform.runLater(() -> {
                 stopMonitorAction.run();
             }));
 
             java.awt.MenuItem exitItem = new java.awt.MenuItem("結束程式");
+            exitItem.setFont(chineseFont);
             exitItem.addActionListener(e -> Platform.runLater(() -> {
                 exitAction.run();
             }));
@@ -253,5 +263,26 @@ public class TrayUIManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private java.awt.Font resolveCjkFont(int size) {
+        String[] candidates = {
+            "Microsoft JhengHei",   // Windows 正黑體
+            "Microsoft YaHei",      // Windows 雅黑體（簡體備援）
+            "PingFang TC",          // macOS 蘋方
+            "Noto Sans CJK TC",     // Linux
+            "Dialog"                // JVM 通用 fallback
+        };
+        java.awt.GraphicsEnvironment ge = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
+        java.util.Set<String> available = new java.util.HashSet<>(
+            java.util.Arrays.asList(ge.getAvailableFontFamilyNames())
+        );
+        for (String name : candidates) {
+            if (available.contains(name)) {
+                return new java.awt.Font(name, java.awt.Font.PLAIN, size);
+            }
+        }
+
+        return new java.awt.Font("Dialog", java.awt.Font.PLAIN, size);
     }
 }
