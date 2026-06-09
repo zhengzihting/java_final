@@ -1,0 +1,377 @@
+@startuml
+skinparam classAttributeIconSize 0
+left to right direction
+title Ticket Monitor System - Class Diagram
+
+' --- Packages & Classes Definition ---
+
+package app.main {
+    class Launcher {
+        +{static} main(args: String[]): void
+    }
+    
+    class MainApp {
+        -controller: MainController
+        +start(primaryStage: Stage): void
+        +{static} main(args: String[]): void
+    }
+}
+
+package app.controller {
+    enum UiState {
+        IDLE
+        ' 可依實際情況延伸其他狀態
+    }
+
+    class MainController {
+        -uiState: UiState
+        -view: MainView
+        -primaryStage: Stage
+        -trayUIManager: TrayUIManager
+        -monitor: TicketMonitor
+        -notificationService: SystemNotificationService
+        -historyTableManager: HistoryTableManager
+        -soundManager: SoundManager
+        -taskUIBridge: TaskUIBridge
+        -notifyBtnPause: PauseTransition
+        +initialize(): void
+        -setupEventHandlers(): void
+        +exitApplication(): void
+        -handleStart(): void
+        -handleLoginConfirmed(): void
+        -handleStop(): void
+        -handleNotifyToggle(): void
+        -handleTestNotification(): void
+        -setUIState(state: UiState): void
+        -appendLog(message: String): void
+    }
+
+    class TaskUIBridge {
+        -taskStorageService: TaskStorageService
+        -urlInput: TextField
+        -areaInput: TextField
+        -priceInput: TextField
+        -logger: Consumer<String>
+        +TaskUIBridge(urlInput: TextField, areaInput: TextField, priceInput: TextField, logger: Consumer<String>)
+        +restoreLatestTask(onSoundPathRestored: Consumer<String>): void
+        +parseAndRestoreRecord(message: String): void
+        +saveCurrentTask(status: String, soundPath: String): void
+    }
+}
+
+package app.crawler {
+    abstract class TicketWebCrawler {
+        -url: String
+        -localHostUrl: String
+        -os: String
+        -playwright: Playwright
+        -ws: WebSocketEndPoint
+        -browser: Browser
+        -defaultContext: BrowserContext
+        -buyTicketPage: Page
+        +startCrawler(): void
+        +startCrawler(port: int): void
+        +refreshPage(): void
+        +closeCrawler(): void
+    }
+
+    class KktixCrawler {
+        +crawlTickets(): TicketList
+    }
+}
+
+package app.crawler.websocket {
+    interface WebSocketEndPoint {
+        +{static} port: int = 9222
+        +defaultPath(): void
+        +getPort(): int
+        +browserPathExist(): boolean
+        +startWebSocket(): void
+    }
+
+    class MacWebSocket {
+        -port: int
+        -browserPath: String
+        -haveBrowserPath: boolean
+        +defaultPath(): void
+        +getPort(): int
+        +browserPathExist(): boolean
+        +startWebSocket(): void
+    }
+    
+    class WinWebSocket {
+        ' 預留實作
+    }
+}
+
+package app.model {
+    class MonitorEvent {
+        +message: String
+        +ticketFound: boolean
+        +{static} log(message: String): MonitorEvent
+        +{static} ticketFound(message: String): MonitorEvent
+    }
+}
+
+package app.service {
+    class TicketMonitor {
+        -{static} KKTIX_HOME: String
+        -url: String
+        -keyword: String
+        -callback: Consumer<MonitorEvent>
+        -timer: Timer
+        -crawler: KktixCrawler
+        -isCrawling: boolean
+        -isStopped: boolean
+        -random: Random
+        +TicketMonitor(url: String, keyword: String, callback: Consumer<MonitorEvent>)
+        +prepareMonitoring(onReady: Runnable): void
+        +beginMonitoring(intervalSeconds: int): void
+        +stopMonitoring(): void
+        -scheduleNextCrawl(matcher: TicketMatcher, ...): void
+        -nextDelayMs(baseSeconds: int): long
+        -crawlAndCheck(matcher: TicketMatcher): void
+        -isBrowserClosed(e: Exception): boolean
+        -matchesIgnoreStatus(matcher: TicketMatcher, ticket: TicketsInfo): boolean
+    }
+
+    class TaskStorageService {
+        -{static} TASK_LIST_TYPE: Type
+        -gson: Gson
+        -storagePath: Path
+        +loadLatestTask(): Optional<StoredTask>
+        +upsertTask(task: StoredTask): void
+        -loadTasks(): List<StoredTask>
+        -writeTasks(tasks: List<StoredTask>): void
+        -findTaskIndex(tasks: List<StoredTask>, url: String): int
+        -safeTimestamp(value: String): String
+    }
+
+    class StoredTask {
+        +url: String
+        +area: String
+        +price: String
+        +keyword: String
+        +createdAt: String
+        +updatedAt: String
+        +lastStatus: String
+        +soundPath: String
+        +{static} fromInputs(...): StoredTask
+        -{static} clean(value: String): String
+    }
+
+    class SystemNotificationService {
+        -logger: Consumer<String>
+        -soundPlayer: SoundPlayer
+        -soundPath: String
+        -{static} NOTIFY_ICON: Image
+        -popupEnabled: boolean
+        +isPopupEnabled(): boolean
+        +notifyTicketAvailable(ticketUrl: String, details: String): void
+        +stopNotifySound(): void
+        +isNotifySoundPlaying(): boolean
+        -{static} loadIcon(): Image
+        -openTicketUrl(ticketUrl: String): void
+        -log(message: String): void
+    }
+
+    class SoundPlayer {
+        +{static} DEFAULT_SENTINEL: String
+        -currentClip: AtomicReference<Clip>
+        -currentMedia: AtomicReference<MediaPlayer>
+        +{static} resolveDefaultSoundPath(): String
+        +{static} defaultDisplayLabel(): String
+        +playAsync(path: String, onError: Consumer<String>): void
+        +playDefaultAsync(onError: Consumer<String>): void
+        +stopAll(): void
+        +isPlaying(): boolean
+        -playFileClip(path: String, onError: Consumer<String>): void
+        -playAudioStream(...): void
+        -openAndPlayClip(...): void
+        -playWithMediaPlayer(...): void
+        -{static} beep(): void
+    }
+
+    class SoundManager {
+        +{static} DEFAULT_LABEL: String
+        +{static} CUSTOM_LABEL: String
+        +{static} SOUNDS_DIR: Path
+        -soundPathLabel: Label
+        -notificationService: SystemNotificationService
+        -logger: Consumer<String>
+        -customSelected: boolean
+        -customSoundPath: String
+        -previewPlayer: SoundPlayer
+        -initSoundsDir(): void
+        +openSoundsFolder(): void
+        +handleCustomSelection(): boolean
+        +chooseSpecificCustomSound(stage: Stage): boolean
+        -listSoundFiles(): List<File>
+        +selectDefault(): void
+        +resolveSelectedSoundPath(): String
+        +restoreSoundPath(savedPath: String): boolean
+        +previewSound(): void
+        +stopPreview(): void
+        +stopAllSounds(): void
+    }
+
+    class DatabaseManager {
+        -{static} DB_URL: String
+        +{static} initializeDatabase(): void
+        +{static} saveLog(message: String): void
+        +{static} getRecentHistory(): String
+        +{static} getMonitoringHistory(): List<HistoryEntry>
+        +{static} clearHistory(): void
+        +{static} deleteHistoryEntry(id: int): void
+    }
+
+    class HistoryEntry {
+        +id: int
+        +timestamp: String
+        +message: String
+        +toString(): String
+    }
+}
+
+package app.ticketData {
+    class TicketsInfo {
+        enum StatusType
+        -ticketType: String
+        -ticketPrice: String
+        -ticketStatus: StatusType
+        +toString(): String
+    }
+
+    class TicketList {
+        -ticketsInfo: List<TicketsInfo>
+        +setTickets(ticketUnits: List<Locator>): void
+        +haveTicket(): boolean
+        +toString(): String
+    }
+}
+
+package app.util {
+    class NotificationTestHelper {
+        +{static} DEFAULT_URL: String
+        +{static} DEFAULT_AREA: String
+        +{static} DEFAULT_PRICE: String
+        +{static} build(url: String, area: String, price: String): NotificationPayload
+    }
+
+    class NotificationPayload {
+        +url: String
+        +details: String
+    }
+
+    class TicketMatcher {
+        -area: String
+        -price: String
+        +matches(ticket: TicketsInfo): boolean
+        +toString(): String
+    }
+}
+
+package app.view {
+    class MainView {
+        -root: VBox
+        -urlInput: TextField
+        -areaInput: TextField
+        -priceInput: TextField
+        -startBtn: Button
+        -stopBtn: Button
+        -muteAllBtn: Button
+        -notifyToggleBtn: Button
+        -previewSoundBtn: Button
+        -soundToggle: SoundToggleSwitch
+        -soundPathLabel: Label
+        -addGridRow(grid: GridPane, labelText: String, control: Node, row: int): void
+        +addHistorySection(historySection: VBox): void
+    }
+
+    class SoundToggleSwitch {
+        -{static} TRACK_W: double
+        -{static} TRACK_H: double
+        -{static} THUMB_W: double
+        -{static} PAD: double
+        -leftX: double
+        -rightX: double
+        -customSelected: boolean
+        -track: Rectangle
+        -thumbLabel: Label
+        -anim: TranslateTransition
+        -clickHandler: Runnable
+        -rightClickHandler: Runnable
+        +setCustom(isCustom: boolean): void
+        -makeTrackLabel(text: String): Label
+    }
+
+    class HistoryTableManager {
+        -historyTableView: TableView<HistoryEntry>
+        -historySection: VBox
+        -onRecordSelected: Consumer<String>
+        -createHistorySection(): VBox
+        +getView(): VBox
+        +refreshHistoryList(): void
+        -parseField(message: String, prefix: String): String
+    }
+
+    class TrayUIManager {
+        -primaryStage: Stage
+        -showMainAction: Runnable
+        -stopMonitorAction: Runnable
+        -exitAction: Runnable
+        -monitorLogStage: Stage
+        -statusLight: Circle
+        -statusLabel: Label
+        -detailsLabel: Label
+        -breathAnimation: FadeTransition
+        +clearLog(): void
+        +appendLog(message: String): void
+        -startBreathAnimation(): void
+        +showFloatingLogIfNotShowing(): void
+        -initFloatingLogWindow(): void
+        -toggleFloatingLogWindow(): void
+        -setupSystemTray(): void
+    }
+}
+
+' --- Relationships (Outside Packages) ---
+
+MainApp --> MainController : "holds"
+MainController --> MainView : "controls"
+MainController --> TrayUIManager : "updates"
+MainController --> TicketMonitor : "manages"
+MainController --> SystemNotificationService : "triggers"
+MainController --> HistoryTableManager : "updates"
+MainController --> SoundManager : "configures"
+MainController --> TaskUIBridge : "delegates"
+
+TaskUIBridge --> TaskStorageService : "uses"
+
+TicketWebCrawler <|-- KktixCrawler : "extends"
+WebSocketEndPoint <|.. MacWebSocket : "implements"
+WebSocketEndPoint <|.. WinWebSocket : "implements"
+TicketWebCrawler --> WebSocketEndPoint : "uses"
+
+TicketMonitor --> KktixCrawler : "drives"
+TicketMonitor ..> TicketMatcher : "uses"
+TicketMonitor ..> MonitorEvent : "emits"
+TicketMonitor ..> TicketsInfo : "checks"
+
+TaskStorageService +-- StoredTask : "nested class"
+SystemNotificationService --> SoundPlayer : "plays via"
+
+SoundManager --> SystemNotificationService : "syncs with"
+SoundManager --> SoundPlayer : "previews via"
+
+DatabaseManager +-- HistoryEntry : "nested class"
+HistoryTableManager ..> HistoryEntry : "displays"
+
+NotificationTestHelper +-- NotificationPayload : "nested class"
+
+TicketList --> TicketsInfo : "contains"
+MainView --> SoundToggleSwitch : "includes"
+
+MainController +-- UiState : "nested enum"
+
+@enduml
