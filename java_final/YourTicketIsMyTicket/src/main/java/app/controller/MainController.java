@@ -85,8 +85,7 @@ public class MainController {
         });
 
         view.getSoundToggle().setOnRightClicked(() -> {
-            boolean ok = soundManager.chooseSpecificCustomSound(primaryStage);
-            if (ok) view.getSoundToggle().setCustom(true);
+            soundManager.openSoundsFolder();
         });
 
         view.getPreviewSoundBtn().setOnAction(e -> soundManager.previewSound());
