@@ -15,7 +15,7 @@ public class KktixCrawler extends TicketWebCrawler {
         try{
             List<Locator> ticketUnits = getBuyTicketPage().locator("div.ticket-unit").all();
             ticketUnits.get(0).waitFor(new Locator.WaitForOptions().setTimeout(30000));
-            Thread.sleep(5000);
+            Thread.sleep(800);
 
             ticketList.setTickets(ticketUnits);
         }catch(InterruptedException e){

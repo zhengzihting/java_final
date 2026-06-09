@@ -27,6 +27,9 @@ public abstract class TicketWebCrawler {
             playwright = Playwright.create();
             if(os.contains("mac")) ws = new MacWebSocket();
             else if(os.contains("win")) ws = new WinWebSocket();
+            else{
+                System.err.println("No support this os.");
+            }
             ws.startWebSocket();
 
             // 建立CDP的browser創建

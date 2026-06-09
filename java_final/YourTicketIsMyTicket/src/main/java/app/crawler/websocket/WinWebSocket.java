@@ -58,7 +58,8 @@ public class WinWebSocket implements WebSocketEndPoint{
                     "--no-default-browser-check");
             try{
                 pb.start();
-            } catch (IOException e) {
+                Thread.sleep(1000);
+            } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }

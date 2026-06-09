@@ -51,7 +51,7 @@ public class MacWebSocket implements WebSocketEndPoint {
                     "--use-mock-keychain");
             try{
                 pb.start();
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
