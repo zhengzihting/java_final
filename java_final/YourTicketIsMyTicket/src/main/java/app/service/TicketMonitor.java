@@ -229,19 +229,11 @@ public class TicketMonitor {
                 final String price  = ticket.getTicketPrice();
                 final TicketsInfo.StatusType status = ticket.getTicketStatus();
 
-                if (matcher.matches(ticket)) {
-                    Platform.runLater(() ->
-                        callback.accept(MonitorEvent.ticketFound(
-                            "找到符合條件的釋票：" + type + "　NT$" + price))
-                    );
-                    found = true;
-                    break;
-                }
 
                 if (matcher.matches(ticket)) {
                     Platform.runLater(() ->
                         callback.accept(MonitorEvent.ticketFound(
-                            "找到【" + this.keyword + "】的釋票：" + type + " NT$" + price)) // 👈 加上 this.keyword！
+                            "找到【" + this.keyword + "】的釋票：" + type + " " + price))
                     );
                     found = true;
                     break;
