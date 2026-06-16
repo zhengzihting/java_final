@@ -20,7 +20,8 @@ package app.main {
 package app.controller {
     enum UiState {
         IDLE
-        ' 可依實際情況延伸其他狀態
+        WAITING_LOGIN
+        RUNNING
     }
 
     class MainController {
@@ -100,7 +101,13 @@ package app.crawler.websocket {
     }
     
     class WinWebSocket {
-        ' 預留實作
+        -port: int
+        -browserPath: String
+        -haveBrowserPath: boolean
+        +defaultPath(): void
+        +getPort(): int
+        +browserPathExist(): boolean
+        +startWebSocket(): void
     }
 }
 
@@ -248,6 +255,12 @@ package app.ticketData {
         +haveTicket(): boolean
         +toString(): String
     }
+
+    enum StatusType{
+        SELLING
+        SOLD_OUT
+        CLOSED
+    }
 }
 
 package app.util {
@@ -369,6 +382,7 @@ HistoryTableManager ..> HistoryEntry : "displays"
 
 NotificationTestHelper +-- NotificationPayload : "nested class"
 
+TicketsInfo +-- StatusType : "nested enum"
 TicketList --> TicketsInfo : "contains"
 MainView --> SoundToggleSwitch : "includes"
 
