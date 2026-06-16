@@ -66,7 +66,7 @@ public class SystemNotificationService {
 
                 var builder = Notify.Companion.create()
                         .title("YourTicketIsMyTicket")
-                        .text("偵測到符合條件的釋票，點擊通知開啟購票頁面。")
+                        .text(details)
                         .hideAfter(12000)
                         .position(Position.TOP_RIGHT)
                         .onClickAction(notification -> {
