@@ -238,12 +238,13 @@ public class TicketMonitor {
                     break;
                 }
 
-                // 若此票在關鍵字條件（區域 / 票價）上符合，但狀態為已售完，則特別提示
-                if (status == TicketsInfo.StatusType.SOLD_OUT && matchesIgnoreStatus(matcher, ticket)) {
+                if (matcher.matches(ticket)) {
                     Platform.runLater(() ->
-                        callback.accept(MonitorEvent.log(
-                            "已售完：" + type + "　NT$" + price))
+                        callback.accept(MonitorEvent.ticketFound(
+                            "找到【" + this.keyword + "】的釋票：" + type + " NT$" + price)) // 👈 加上 this.keyword！
                     );
+                    found = true;
+                    break;
                 }
             }
 
