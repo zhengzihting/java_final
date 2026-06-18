@@ -56,13 +56,12 @@ if exist "%OUTPUT_DIR%" rmdir /s /q "%OUTPUT_DIR%"
 mkdir "%OUTPUT_DIR%"
 
 REM 決定打包類型
-set "PKG_TYPE=exe"
-if "%1"=="--msi" set "PKG_TYPE=msi"
+set "PKG_TYPE=app-image"
 
 set "ICON_ARG="
 if exist "%ICON%" set "ICON_ARG=--icon "%ICON%""
 
-jpackage ^
+"%LocalAppData%\Programs\Microsoft\jdk-25.0.3.9-hotspot\bin\jpackage" ^
     --type %PKG_TYPE% ^
     --name "%APP_NAME%" ^
     --app-version "%APP_VERSION%" ^
@@ -74,10 +73,7 @@ jpackage ^
     --java-options "-Dapp.packaged=true" ^
     --java-options "--enable-native-access=ALL-UNNAMED" ^
     --java-options "-Xmx512m" ^
-    --java-options "-Dfile.encoding=UTF-8" ^
-    --win-shortcut ^
-    --win-menu ^
-    --win-menu-group "%APP_NAME%"
+    --java-options "-Dfile.encoding=UTF-8"
 
 if errorlevel 1 (
     echo [ERROR] jpackage 失敗。
@@ -93,4 +89,5 @@ echo 📂 使用者資料將儲存於：
 echo    %%APPDATA%%\%APP_NAME%\
 echo    （包含 tasks.json、ticket_monitor.db、sounds\）
 echo.
+pause
 endlocal
