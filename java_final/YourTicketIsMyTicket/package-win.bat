@@ -1,6 +1,6 @@
 @echo off
 REM =============================================================================
-REM package-win.bat — 在 Windows 上將專案打包成 .exe 安裝程式
+REM package-win.bat — Package the project into an .exe installer on Windows
 REM =============================================================================
 setlocal enabledelayedexpansion
 
@@ -22,26 +22,26 @@ echo ============================================================
 echo  YourTicketIsMyTicket - Windows Packager
 echo ============================================================
 
-REM ─── 1. Maven 打包成 Fat JAR ─────────────────────────────────────────────
-echo [1/3] 執行 mvn clean package ...
+REM ─── 1. Package into Fat JAR using Maven ───────────────────────────────────
+echo [1/3] Executing mvn clean package ...
 cd /d "%PROJECT_DIR%"
 call mvn clean package -q
 if errorlevel 1 (
-    echo [ERROR] Maven 打包失敗，請檢查錯誤訊息。
+    echo [ERROR] Maven build failed, please check the error message.
     pause
     exit /b 1
 )
-echo       ✓ Fat JAR 已產生：target\%MAIN_JAR%
+echo       Fat JAR generated: target\%MAIN_JAR%
 
-REM ─── 2. 準備 jpackage 輸入目錄 ─────────────────────────────────────────
-echo [2/3] 準備輸入目錄 ...
+REM ─── 2. Prepare jpackage input directory ─────────────────────────────────────
+echo [2/3] Preparing input directory ...
 if exist "%INPUT_DIR%" rmdir /s /q "%INPUT_DIR%"
 mkdir "%INPUT_DIR%"
 copy /y "target\%MAIN_JAR%" "%INPUT_DIR%\" >nul
-echo       ✓ 輸入目錄準備完成
+echo       Input directory prepared
 
-REM ─── 3. 自動偵測 jpackage 路徑並執行 ──────────────────────────────────
-echo [3/3] 尋找 jpackage 並執行 ...
+REM ─── 3. Auto-detect jpackage path and execute ──────────────────────────────
+echo [3/3] Searching for jpackage and executing ...
 if exist "%OUTPUT_DIR%" rmdir /s /q "%OUTPUT_DIR%"
 mkdir "%OUTPUT_DIR%"
 
@@ -72,12 +72,12 @@ for /d %%i in ("%LocalAppData%\Programs\Microsoft\jdk*") do (
     )
 )
 
-echo [ERROR] 無法自動偵測到 jpackage。請確認已安裝 JDK，或設定 JAVA_HOME 變數。
+echo [ERROR] Cannot auto-detect jpackage. Please ensure JDK is installed or JAVA_HOME is set.
 pause
 exit /b 1
 
 :ExecuteJPackage
-echo       使用的 jpackage 路徑: "!JPACKAGE_CMD!"
+echo       Using jpackage path: "!JPACKAGE_CMD!"
 
 "!JPACKAGE_CMD!" ^
     --type %PKG_TYPE% ^
@@ -94,18 +94,18 @@ echo       使用的 jpackage 路徑: "!JPACKAGE_CMD!"
     --java-options "-Dfile.encoding=UTF-8"
 
 if errorlevel 1 (
-    echo [ERROR] jpackage 執行失敗。
+    echo [ERROR] jpackage execution failed.
     pause
     exit /b 1
 )
 
 echo.
-echo 完成！安裝程式位於：
+echo Done! Installer is located at:
 echo    %OUTPUT_DIR%\
 echo.
-echo 使用者資料將儲存於：
+echo User data will be saved at:
 echo    %%APPDATA%%\%APP_NAME%\
-echo    （包含 tasks.json、ticket_monitor.db、sounds\）
+echo    (includes tasks.json, ticket_monitor.db, sounds\)
 echo.
 pause
 endlocal
