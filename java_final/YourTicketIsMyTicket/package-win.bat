@@ -1,19 +1,10 @@
 @echo off
 REM =============================================================================
 REM package-win.bat — 在 Windows 上將專案打包成 .exe 安裝程式
-REM
-REM 用法（在 CMD 或 PowerShell 執行）：
-REM   package-win.bat          產生 .exe 安裝程式
-REM   package-win.bat --msi    改產生 .msi 安裝程式
-REM
-REM 前置需求：
-REM   - JDK 17+（含 jpackage）
-REM   - WiX Toolset 3.x（產生 .msi 需要）https://wixtoolset.org/
 REM =============================================================================
 setlocal enabledelayedexpansion
 
 set "PROJECT_DIR=%~dp0"
-REM 移除尾部反斜線
 if "%PROJECT_DIR:~-1%"=="\" set "PROJECT_DIR=%PROJECT_DIR:~0,-1%"
 
 set "APP_NAME=YourTicketIsMyTicket"
@@ -24,8 +15,6 @@ set "MAIN_CLASS=app.main.Launcher"
 set "INPUT_DIR=%PROJECT_DIR%\target\jpackage-input"
 set "OUTPUT_DIR=%PROJECT_DIR%\target\dist"
 
-REM 圖示檔（Windows 需要 .ico 格式）
-REM 可用 https://www.icoconverter.com 將 notify_icon.png 轉為 app.ico 後放在此路徑
 set "ICON=%PROJECT_DIR%\src\main\resources\app.ico"
 
 echo.
@@ -39,6 +28,7 @@ cd /d "%PROJECT_DIR%"
 call mvn clean package -q
 if errorlevel 1 (
     echo [ERROR] Maven 打包失敗，請檢查錯誤訊息。
+    pause
     exit /b 1
 )
 echo       ✓ Fat JAR 已產生：target\%MAIN_JAR%
@@ -50,18 +40,46 @@ mkdir "%INPUT_DIR%"
 copy /y "target\%MAIN_JAR%" "%INPUT_DIR%\" >nul
 echo       ✓ 輸入目錄準備完成
 
-REM ─── 3. 執行 jpackage ──────────────────────────────────────────────────
-echo [3/3] 執行 jpackage ...
+REM ─── 3. 自動偵測 jpackage 路徑並執行 ──────────────────────────────────
+echo [3/3] 尋找 jpackage 並執行 ...
 if exist "%OUTPUT_DIR%" rmdir /s /q "%OUTPUT_DIR%"
 mkdir "%OUTPUT_DIR%"
 
-REM 決定打包類型
 set "PKG_TYPE=app-image"
 
 set "ICON_ARG="
 if exist "%ICON%" set "ICON_ARG=--icon "%ICON%""
 
-"%LocalAppData%\Programs\Microsoft\jdk-25.0.3.9-hotspot\bin\jpackage" ^
+set "JPACKAGE_CMD="
+
+where jpackage >nul 2>&1
+if %errorlevel% equ 0 (
+    set "JPACKAGE_CMD=jpackage"
+    goto :ExecuteJPackage
+)
+
+if defined JAVA_HOME (
+    if exist "%JAVA_HOME%\bin\jpackage.exe" (
+        set "JPACKAGE_CMD=%JAVA_HOME%\bin\jpackage.exe"
+        goto :ExecuteJPackage
+    )
+)
+
+for /d %%i in ("%LocalAppData%\Programs\Microsoft\jdk*") do (
+    if exist "%%i\bin\jpackage.exe" (
+        set "JPACKAGE_CMD=%%i\bin\jpackage.exe"
+        goto :ExecuteJPackage
+    )
+)
+
+echo [ERROR] 無法自動偵測到 jpackage。請確認已安裝 JDK，或設定 JAVA_HOME 變數。
+pause
+exit /b 1
+
+:ExecuteJPackage
+echo       使用的 jpackage 路徑: "!JPACKAGE_CMD!"
+
+"!JPACKAGE_CMD!" ^
     --type %PKG_TYPE% ^
     --name "%APP_NAME%" ^
     --app-version "%APP_VERSION%" ^
@@ -76,16 +94,16 @@ if exist "%ICON%" set "ICON_ARG=--icon "%ICON%""
     --java-options "-Dfile.encoding=UTF-8"
 
 if errorlevel 1 (
-    echo [ERROR] jpackage 失敗。
-    echo 若要產生 .msi，請確認已安裝 WiX Toolset 3.x
+    echo [ERROR] jpackage 執行失敗。
+    pause
     exit /b 1
 )
 
 echo.
-echo ✅ 完成！安裝程式位於：
+echo 完成！安裝程式位於：
 echo    %OUTPUT_DIR%\
 echo.
-echo 📂 使用者資料將儲存於：
+echo 使用者資料將儲存於：
 echo    %%APPDATA%%\%APP_NAME%\
 echo    （包含 tasks.json、ticket_monitor.db、sounds\）
 echo.
