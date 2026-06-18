@@ -14,3 +14,11 @@ jpackage --type dmg \
         --dest .. \
         --main-class app.main.Launcher \
         --main-jar YourTicketIsMyTicket-1.0-SNAPSHOT.jar
+windows，則輸入：
+jpackage --type exe `
+        --name "YourTicketIsMyTicket" `
+        --input target `
+        --dest .. `
+        --main-class app.main.Launcher `
+        --main-jar YourTicketIsMyTicket-1.0-SNAPSHOT.jar `
+        --win-shortcut
