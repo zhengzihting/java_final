@@ -3,6 +3,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import app.util.AppDirs;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -22,7 +23,7 @@ public class TaskStorageService {
     private final Path storagePath;
 
     public TaskStorageService() {
-        this(Paths.get(System.getProperty("user.dir"), "tasks.json"));
+        this(AppDirs.tasksJson());
     }
 
     public TaskStorageService(Path storagePath) {

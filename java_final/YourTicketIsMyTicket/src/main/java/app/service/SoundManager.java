@@ -1,6 +1,8 @@
 package app.service;
 
 import app.main.MainApp;
+import app.util.AppDirs;
+import app.util.BundledSoundsInstaller;
 import app.view.SoundToggleSwitch;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
@@ -39,9 +41,8 @@ public class SoundManager {
     public static final String DEFAULT_LABEL = "🔔 預設音效";
     public static final String CUSTOM_LABEL  = "📂 自訂檔案...";
 
-    /** 音效庫資料夾：Maven 專案根目錄下的 sounds/ */
-    public static final Path SOUNDS_DIR =
-            Path.of(System.getProperty("user.dir"), "sounds");
+    /** 音效庫資料夾：開發時為專案根目錄/sounds/；打包後為 ~/Library/Application Support/YourTicketIsMyTicket/sounds/ */
+    public static final Path SOUNDS_DIR = AppDirs.soundsDir();
 
     private final Label soundPathLabel;
     private final SystemNotificationService notificationService;
@@ -72,6 +73,8 @@ public class SoundManager {
         } catch (Exception e) {
             logger.accept("無法建立音效資料夾：" + e.getMessage());
         }
+        // 將 JAR 內建的預設音效複製到 sounds/（已存在的不覆蓋）
+        BundledSoundsInstaller.installIfNeeded(logger);
     }
 
     /**

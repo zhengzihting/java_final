@@ -1,8 +1,8 @@
 package app.service;
 
 import app.main.MainApp;
-
-import java.io.File;
+import app.util.AppDirs;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,30 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
-    // 設定 SQLite 資料庫檔案名稱，會在專案根目錄自動生成這個檔案
-    private static final String DB_URL = "jdbc:sqlite:" + getSafeDatabasePath();
-
-    private static String getSafeDatabasePath() {
-        String userHome = System.getProperty("user.home");
-        String os = System.getProperty("os.name").toLowerCase();
-        File appDataFolder;
-
-        if (os.contains("mac")) {
-            appDataFolder = new File(userHome, "Library/Application Support/YourTicketIsMyTicket");
-        } else if (os.contains("win")) {
-            String appData = System.getenv("APPDATA");
-            appDataFolder = new File(appData != null ? appData : userHome, "YourTicketIsMyTicket");
-        } else {
-            appDataFolder = new File(userHome, ".YourTicketIsMyTicket");
-        }
-
-        // 如果專屬資料夾不存在，先幫它建立起來
-        if (!appDataFolder.exists()) {
-            appDataFolder.mkdirs();
-        }
-
-        return new File(appDataFolder, "ticket_monitor.db").getAbsolutePath();
-    }
+    // 設定 SQLite 資料庫 JDBC URL（絕對路徑，避免打包後 CWD 變更導致找不到檔案）
+    // 開發時指向專案根目錄；打包後指向平台標準應用程式資料目錄
+    private static final String DB_URL = AppDirs.dbUrl();
 
     /**
      * 結構化歷史紀錄物件
@@ -61,6 +40,12 @@ public class DatabaseManager {
      * 1. 初始化資料庫：建立儲存紀錄的資料表
      */
     public static void initializeDatabase() {
+        try {
+            // 確保資料目錄存在（首次啟動時建立），必須在 SQLite 連線前執行
+            Files.createDirectories(AppDirs.dataRoot());
+        } catch (Exception e) {
+            System.err.println("無法建立資料目錄：" + e.getMessage());
+        }
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement()) {
             
@@ -71,7 +56,7 @@ public class DatabaseManager {
                          "message TEXT NOT NULL" +
                          ");";
             stmt.execute(sql);
-            System.out.println("QLite 資料庫初始化成功！");
+            System.out.println("SQLite 資料庫初始化成功！");
         } catch (Exception e) {
             System.err.println("資料庫初始化失敗: " + e.getMessage());
         }
