@@ -1,6 +1,8 @@
 package app.service;
 
 import app.main.MainApp;
+
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,7 +13,29 @@ import java.util.List;
 
 public class DatabaseManager {
     // 設定 SQLite 資料庫檔案名稱，會在專案根目錄自動生成這個檔案
-    private static final String DB_URL = "jdbc:sqlite:ticket_monitor.db";
+    private static final String DB_URL = "jdbc:sqlite:" + getSafeDatabasePath();
+
+    private static String getSafeDatabasePath() {
+        String userHome = System.getProperty("user.home");
+        String os = System.getProperty("os.name").toLowerCase();
+        File appDataFolder;
+
+        if (os.contains("mac")) {
+            appDataFolder = new File(userHome, "Library/Application Support/YourTicketIsMyTicket");
+        } else if (os.contains("win")) {
+            String appData = System.getenv("APPDATA");
+            appDataFolder = new File(appData != null ? appData : userHome, "YourTicketIsMyTicket");
+        } else {
+            appDataFolder = new File(userHome, ".YourTicketIsMyTicket");
+        }
+
+        // 如果專屬資料夾不存在，先幫它建立起來
+        if (!appDataFolder.exists()) {
+            appDataFolder.mkdirs();
+        }
+
+        return new File(appDataFolder, "ticket_monitor.db").getAbsolutePath();
+    }
 
     /**
      * 結構化歷史紀錄物件
