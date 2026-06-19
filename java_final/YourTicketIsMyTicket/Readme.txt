@@ -14,14 +14,12 @@ jpackage --type dmg \
         --dest .. \
         --main-class app.main.Launcher \
         --main-jar YourTicketIsMyTicket-1.0-SNAPSHOT.jar
-windows，則輸入：
-jpackage --type exe `
-        --name "YourTicketIsMyTicket" `
-        --input target `
-        --dest .. `
-        --main-class app.main.Launcher `
-        --main-jar YourTicketIsMyTicket-1.0-SNAPSHOT.jar `
-        --win-shortcut
+
+
+Windows:
+Step 1：下載github release中的壓縮檔並解壓縮
+
+Step 2：開啟資料夾中的exe檔
 
 (2) demo前後之新增或修改：
 1. 跳窗文字增加票的資訊
@@ -29,3 +27,4 @@ jpackage --type exe `
 
 (3) 其他說明事項
 1. 第一次開啟瀏覽器時，需等待1到3分鐘
+2. 系統將在背景持續運作，如果要完全關閉，請在選單列icon按右鍵開啟選單，並點選「結束程式」
