@@ -1,5 +1,6 @@
 (1) 專案安裝及實行步驟：
-Step 1：確保使用者有安裝maven和JDK25，且作業系統為mac或windows
+Mac 方法一 自行打包：
+Step 1：確保使用者有安裝maven和JDK25
 
 Step 2：下載github的程式碼
 
@@ -15,6 +16,13 @@ jpackage --type dmg \
         --main-class app.main.Launcher \
         --main-jar YourTicketIsMyTicket-1.0-SNAPSHOT.jar
 
+Mac 方法二 繞過安全憑證：
+Step 1：下載github release中的檔案
+
+Step 2：將app拖移到應用程式資料夾
+
+Step 3：再開啟終端機，輸入：
+xattr -cr /Applications/YourTicketIsMyTicket.app
 
 Windows:
 Step 1：下載github release中的壓縮檔並解壓縮
